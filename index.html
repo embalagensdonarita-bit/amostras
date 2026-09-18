@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dona Rita | Sistema de Amostras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --roxo-950: #1e0533; --roxo-900: #2d0a4a; --roxo-800: #3b0f5e; --roxo-700: #4a1575; --roxo-600: #5c1d8f; --roxo-500: #6d28a8;
+            --roxo-400: #8b3fcf; --roxo-300: #a868e6; --roxo-200: #c99af7; --roxo-100: #e2cdf8; --roxo-50: #f6f0fc; --roxo-25: #fbf8fd;
+            --verde: #10b981; --verde-claro: #d1fae5; --amarelo: #f59e0b; --amarelo-claro: #fef3c7; --laranja: #ef4444; --laranja-claro: #fee2e2;
+            --azul: #3b82f6; --azul-claro: #dbeafe; --cinza-700: #374151; --cinza-500: #6b7280; --cinza-300: #d1d5db; --cinza-100: #f3f4f6;
+            --branco: #ffffff; --sombra-sm: 0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04); --sombra-md: 0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);
+            --sombra-lg: 0 10px 25px rgba(0,0,0,0.1),0 4px 10px rgba(0,0,0,0.08); --sombra-xl: 0 20px 50px rgba(0,0,0,0.15); --sombra-roxa: 0 8px 30px rgba(109,40,168,0.25);
+            --raio-sm: 8px; --raio-md: 12px; --raio-lg: 20px; --raio-xl: 28px; --transicao: 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:linear-gradient(160deg,#f8f5fb 0%,#f3ecfa 25%,#ede0f7 50%,#f6f0fc 75%,#fbf8fd 100%); background-attachment:fixed; min-height:100vh; color:#1f1a2e; line-height:1.6; overflow-x:hidden; position:relative; }
+        .bg-particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+        .bg-particle { position:absolute; border-radius:50%; background:var(--roxo-200); opacity:0.25; animation:floatUp 18s infinite ease-in; }
+        .bg-particle:nth-child(1){width:180px;height:180px;left:5%;bottom:-200px;animation-delay:0s;animation-duration:20s;}
+        .bg-particle:nth-child(2){width:120px;height:120px;left:25%;bottom:-150px;animation-delay:4s;animation-duration:16s;opacity:0.2;}
+        .bg-particle:nth-child(3){width:200px;height:200px;left:55%;bottom:-250px;animation-delay:8s;animation-duration:22s;opacity:0.18;}
+        .bg-particle:nth-child(4){width:100px;height:100px;left:75%;bottom:-130px;animation-delay:12s;animation-duration:14s;opacity:0.3;}
+        .bg-particle:nth-child(5){width:160px;height:160px;left:88%;bottom:-200px;animation-delay:6s;animation-duration:19s;opacity:0.22;}
+        .bg-particle:nth-child(6){width:140px;height:140px;left:40%;bottom:-180px;animation-delay:15s;animation-duration:17s;opacity:0.2;}
+        @keyframes floatUp{0%{transform:translateY(0) scale(1) rotate(0deg);opacity:0.25;}30%{opacity:0.45;}70%{opacity:0.15;}100%{transform:translateY(-115vh) scale(0.5) rotate(180deg);opacity:0;}}
+        .app-container { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:20px; min-height:100vh; display:flex; flex-direction:column; }
+        .header { text-align:center; padding:24px 20px 10px; position:relative; z-index:2; }
+        .header-logo { display:inline-flex; flex-direction:column; align-items:center; gap:2px; }
+        .header-logo .logo-icon { width:60px; height:60px; background:linear-gradient(135deg,var(--roxo-500),var(--roxo-700)); border-radius:18px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:28px; box-shadow:var(--sombra-roxa); margin-bottom:4px; transition:var(--transicao); }
+        .header-logo .logo-icon:hover { transform:scale(1.05); box-shadow:0 12px 35px rgba(109,40,168,0.4); }
+        .header-logo .brand-name { font-size:2rem; font-weight:800; letter-spacing:2px; color:var(--roxo-800); line-height:1; text-transform:uppercase; }
+        .header-logo .brand-sub { font-size:0.7rem; font-weight:500; letter-spacing:5px; color:var(--roxo-500); text-transform:uppercase; }
+        .header-logo .brand-tag { font-size:0.85rem; font-weight:600; color:var(--roxo-400); letter-spacing:1px; margin-top:2px; background:var(--roxo-50); padding:3px 16px; border-radius:20px; border:1px solid var(--roxo-100); }
+        .header .admin-link { position:absolute; top:30px; right:20px; font-size:0.8rem; color:var(--roxo-400); text-decoration:none; font-weight:500; transition:var(--transicao); padding:8px 14px; border-radius:20px; border:1px solid transparent; cursor:pointer; background:none; display:flex; align-items:center; gap:6px; font-family:'Poppins',sans-serif; }
+        .header .admin-link:hover { color:var(--roxo-600); background:var(--roxo-50); border-color:var(--roxo-200); }
+        .main-content { flex:1; display:flex; align-items:stretch; justify-content:center; padding:10px 0 30px; position:relative; z-index:2; }
+        .form-card { background:var(--branco); border-radius:var(--raio-xl); padding:36px 32px; width:100%; max-width:700px; box-shadow:var(--sombra-xl); border:1px solid var(--roxo-100); position:relative; overflow:hidden; animation:fadeSlideIn 0.6s ease-out; }
+        @keyframes fadeSlideIn { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+        .form-card::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,var(--roxo-500),var(--roxo-400),var(--roxo-300),var(--roxo-400),var(--roxo-500)); border-radius:var(--raio-xl) var(--raio-xl) 0 0; }
+        .form-card .card-icon { width:50px; height:50px; background:var(--roxo-50); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:22px; color:var(--roxo-500); }
+        .form-card h2 { text-align:center; font-size:1.5rem; font-weight:700; color:var(--roxo-800); margin-bottom:4px; }
+        .form-card .subtitle { text-align:center; font-size:0.85rem; color:var(--cinza-500); margin-bottom:24px; }
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+        .form-grid .full-width { grid-column:1 / -1; }
+        .form-group { display:flex; flex-direction:column; gap:5px; }
+        .form-group label { font-weight:600; font-size:0.82rem; color:var(--roxo-700); letter-spacing:0.3px; display:flex; align-items:center; gap:5px; }
+        .form-group label .req { color:#ef4444; font-weight:700; }
+        .form-group input, .form-group textarea, .form-group select { padding:11px 14px; border:2px solid var(--cinza-300); border-radius:var(--raio-sm); font-size:0.9rem; font-family:'Poppins',sans-serif; transition:var(--transicao); background:var(--roxo-25); color:#1f1a2e; resize:vertical; outline:none; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--roxo-400); box-shadow:0 0 0 3px rgba(139,63,207,0.1); background:#fff; }
+        .form-group input::placeholder, .form-group textarea::placeholder { color:#b0a8b8; }
+        .form-group textarea { min-height:80px; max-height:150px; }
+        .radio-group { display:flex; gap:16px; flex-wrap:wrap; }
+        .radio-option { flex:1; min-width:140px; position:relative; }
+        .radio-option input { position:absolute; opacity:0; pointer-events:none; }
+        .radio-option label { display:flex; align-items:center; gap:8px; padding:12px 16px; border:2px solid var(--cinza-300); border-radius:var(--raio-sm); cursor:pointer; transition:var(--transicao); font-weight:500; font-size:0.85rem; background:var(--roxo-25); color:#4a3d55; }
+        .radio-option input:checked+label { border-color:var(--roxo-500); background:var(--roxo-50); color:var(--roxo-700); font-weight:600; box-shadow:0 0 0 3px rgba(109,40,168,0.08); }
+        .radio-option label:hover { border-color:var(--roxo-300); background:#f9f5fd; }
+        .radio-option label i { font-size:1rem; color:var(--roxo-400); }
+        .amostras-container { display:flex; flex-direction:column; gap:16px; }
+        .amostra-item { display:grid; grid-template-columns:1fr 1fr auto; gap:12px; align-items:start; background:var(--roxo-25); border:2px dashed var(--roxo-100); border-radius:var(--raio-md); padding:16px 14px; position:relative; animation:fadeSlideIn 0.4s ease-out; transition:var(--transicao); }
+        .amostra-item:hover { border-color:var(--roxo-300); background:#fdfbff; }
+        .amostra-item .form-group { margin:0; }
+        .amostra-item .label-qtd { transition:var(--transicao); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+        .btn-remover-amostra { width:36px; height:36px; border-radius:50%; border:2px solid var(--cinza-300); background:#fff; cursor:pointer; font-size:0.9rem; transition:var(--transicao); display:flex; align-items:center; justify-content:center; color:#9ca3af; flex-shrink:0; margin-top:22px; align-self:flex-start; }
+        .btn-remover-amostra:hover { border-color:#ef4444; color:#ef4444; background:#fef2f2; transform:scale(1.08); }
+        .btn-adicionar-amostra { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:12px 20px; background:#fff; border:2px dashed var(--roxo-300); border-radius:30px; cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--roxo-600); transition:var(--transicao); font-family:'Poppins',sans-serif; letter-spacing:0.5px; }
+        .btn-adicionar-amostra:hover { background:var(--roxo-50); border-color:var(--roxo-500); color:var(--roxo-700); box-shadow:0 4px 15px rgba(109,40,168,0.12); transform:translateY(-1px); }
+        .btn-submit { grid-column:1 / -1; padding:14px 28px; background:linear-gradient(135deg,var(--roxo-600),var(--roxo-500)); color:#fff; border:none; border-radius:30px; font-size:1rem; font-weight:700; cursor:pointer; transition:var(--transicao); letter-spacing:1px; font-family:'Poppins',sans-serif; box-shadow:var(--sombra-roxa); display:flex; align-items:center; justify-content:center; gap:8px; margin-top:6px; position:relative; overflow:hidden; }
+        .btn-submit:hover { background:linear-gradient(135deg,var(--roxo-700),var(--roxo-600)); box-shadow:0 12px 35px rgba(109,40,168,0.4); transform:translateY(-2px); }
+        .btn-submit:active { transform:scale(0.97); box-shadow:var(--sombra-md); }
+        .btn-submit::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.15) 50%,transparent 60%); background-size:200% 200%; animation:shimmer 2.5s infinite; }
+        @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+        .btn-submit span { position:relative; z-index:1; }
+        .btn-rastreio { display:inline-flex; align-items:center; gap:8px; padding:10px 24px; background:#fff; border:2px solid var(--roxo-300); border-radius:30px; color:var(--roxo-600); font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transicao); font-family:'Poppins',sans-serif; margin:0 auto 20px; text-align:center; }
+        .btn-rastreio:hover { background:var(--roxo-50); border-color:var(--roxo-500); color:var(--roxo-700); box-shadow:0 4px 15px rgba(109,40,168,0.12); }
+        .admin-section { display:none; width:100%; max-width:1100px; animation:fadeSlideIn 0.5s ease-out; }
+        .admin-section.active { display:block; }
+        .public-section { display:flex; justify-content:center; width:100%; }
+        .public-section.hidden { display:none; }
+        .login-card { background:#fff; border-radius:var(--raio-xl); padding:40px 32px; width:100%; max-width:420px; box-shadow:var(--sombra-xl); text-align:center; border:1px solid var(--roxo-100); margin:40px auto; }
+        .login-card .lock-icon { width:70px; height:70px; background:var(--roxo-50); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:30px; color:var(--roxo-500); }
+        .login-card h3 { color:var(--roxo-800); font-size:1.3rem; margin-bottom:6px; }
+        .login-card p { color:var(--cinza-500); font-size:0.85rem; margin-bottom:20px; }
+        .login-card input { width:100%; padding:12px 16px; border:2px solid var(--cinza-300); border-radius:30px; font-size:0.95rem; text-align:center; font-family:'Poppins',sans-serif; letter-spacing:4px; transition:var(--transicao); outline:none; background:var(--roxo-25); }
+        .login-card input:focus { border-color:var(--roxo-400); box-shadow:0 0 0 3px rgba(139,63,207,0.1); }
+        .login-card .btn-login { width:100%; padding:13px; background:var(--roxo-500); color:#fff; border:none; border-radius:30px; font-weight:700; cursor:pointer; font-size:1rem; margin-top:14px; transition:var(--transicao); font-family:'Poppins',sans-serif; letter-spacing:1px; box-shadow:var(--sombra-roxa); }
+        .login-card .btn-login:hover { background:var(--roxo-600); box-shadow:0 10px 28px rgba(109,40,168,0.35); }
+        .login-error { color:#ef4444; font-size:0.8rem; margin-top:8px; display:none; }
+        .login-error.show { display:block; animation:shake 0.5s; }
+        @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+        .dashboard-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:20px; }
+        .dashboard-header h2 { font-size:1.5rem; color:var(--roxo-800); display:flex; align-items:center; gap:10px; }
+        .dashboard-header .btn-sair { padding:9px 20px; background:#fff; border:2px solid var(--cinza-300); border-radius:25px; cursor:pointer; font-weight:600; color:var(--cinza-700); transition:var(--transicao); font-family:'Poppins',sans-serif; font-size:0.85rem; display:flex; align-items:center; gap:6px; }
+        .dashboard-header .btn-sair:hover { border-color:#ef4444; color:#ef4444; background:#fef2f2; }
+
+        .admin-tabs { display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; background:#fff; padding:7px; border-radius:30px; box-shadow:var(--sombra-md); width:fit-content; border:1px solid var(--roxo-100); }
+        .admin-tab { padding:10px 22px; border-radius:25px; border:none; background:transparent; font-family:'Poppins',sans-serif; font-weight:600; font-size:0.85rem; color:var(--cinza-700); cursor:pointer; transition:var(--transicao); display:inline-flex; align-items:center; gap:8px; }
+        .admin-tab:hover { color:var(--roxo-600); background:var(--roxo-50); }
+        .admin-tab.active { background:linear-gradient(135deg,var(--roxo-600),var(--roxo-500)); color:#fff; box-shadow:var(--sombra-roxa); }
+        .admin-tab-content { display:none; }
+        .admin-tab-content.active { display:block; animation:fadeSlideIn 0.4s ease-out; }
+
+        .dash-filters { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; background:#fff; padding:16px 18px; border-radius:var(--raio-lg); box-shadow:var(--sombra-md); margin-bottom:20px; border:1px solid var(--roxo-100); }
+        .dash-filter-group { display:flex; flex-direction:column; gap:4px; }
+        .dash-filter-group label { font-size:0.72rem; font-weight:700; color:var(--roxo-700); text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:5px; }
+        .dash-filter-group input { padding:9px 14px; border-radius:20px; border:2px solid var(--cinza-300); font-family:'Poppins',sans-serif; font-size:0.85rem; outline:none; transition:var(--transicao); background:var(--roxo-25); color:#1f1a2e; }
+        .dash-filter-group input:focus { border-color:var(--roxo-400); box-shadow:0 0 0 3px rgba(139,63,207,0.1); background:#fff; }
+        .btn-pdf { padding:11px 24px; border-radius:25px; border:none; background:linear-gradient(135deg,#dc2626,#ef4444); color:#fff; font-family:'Poppins',sans-serif; font-weight:700; font-size:0.85rem; cursor:pointer; transition:var(--transicao); display:inline-flex; align-items:center; gap:8px; box-shadow:0 6px 20px rgba(239,68,68,0.3); margin-left:auto; letter-spacing:0.5px; }
+        .btn-pdf:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(239,68,68,0.4); }
+        .btn-pdf:active { transform:scale(0.97); }
+        .btn-pdf:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+
+        .dash-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin-bottom:10px; }
+        .dash-card { background:#fff; border-radius:var(--raio-md); padding:18px; box-shadow:var(--sombra-md); display:flex; align-items:center; gap:14px; border-left:5px solid var(--roxo-400); transition:var(--transicao); }
+        .dash-card:hover { transform:translateY(-3px); box-shadow:var(--sombra-lg); }
+        .dash-card .dc-icon { width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
+        .dash-card .dc-info .dc-value { font-size:1.4rem; font-weight:800; color:#1f1a2e; line-height:1.15; word-break:break-word; }
+        .dash-card .dc-info .dc-label { font-size:0.72rem; color:var(--cinza-500); font-weight:600; text-transform:uppercase; letter-spacing:0.4px; }
+        .dc-purple { border-left-color:var(--roxo-500); } .dc-purple .dc-icon { background:#ede0f7; color:var(--roxo-600); }
+        .dc-blue { border-left-color:#3b82f6; } .dc-blue .dc-icon { background:#dbeafe; color:#2563eb; }
+        .dc-green { border-left-color:#10b981; } .dc-green .dc-icon { background:#d1fae5; color:#059669; }
+        .dc-yellow { border-left-color:#f59e0b; } .dc-yellow .dc-icon { background:#fef3c7; color:#b45309; }
+        .dc-red { border-left-color:#ef4444; } .dc-red .dc-icon { background:#fee2e2; color:#dc2626; }
+        .dc-pink { border-left-color:#ec4899; } .dc-pink .dc-icon { background:#fce7f3; color:#be185d; }
+        .dc-cyan { border-left-color:#06b6d4; } .dc-cyan .dc-icon { background:#cffafe; color:#0e7490; }
+        .dc-indigo { border-left-color:#6366f1; } .dc-indigo .dc-icon { background:#e0e7ff; color:#4338ca; }
+
+        .dash-section-title { font-size:1.05rem; font-weight:700; color:var(--roxo-800); margin:26px 0 12px; display:flex; align-items:center; gap:8px; }
+        .dash-section-title i { color:var(--roxo-500); }
+        .periodo-label { font-size:0.85rem; color:var(--cinza-500); font-weight:500; margin-bottom:14px; display:flex; align-items:center; gap:7px; background:#fff; padding:10px 18px; border-radius:20px; border:1px solid var(--roxo-100); box-shadow:var(--sombra-sm); width:fit-content; }
+        .periodo-label strong { color:var(--roxo-700); }
+
+        /* ===== GRÁFICOS ===== */
+        .charts-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:18px; margin-bottom:8px; }
+        .chart-card { background:#fff; border-radius:var(--raio-lg); padding:18px 18px 14px; box-shadow:var(--sombra-md); border:1px solid var(--roxo-100); transition:var(--transicao); }
+        .chart-card:hover { box-shadow:var(--sombra-lg); }
+        .chart-card .chart-title { font-size:0.95rem; font-weight:700; color:var(--roxo-800); margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+        .chart-card .chart-title i { color:var(--roxo-500); }
+        .chart-card .chart-desc { font-size:0.75rem; color:var(--cinza-500); margin-bottom:12px; line-height:1.45; }
+        .chart-card .chart-wrapper { position:relative; height:280px; width:100%; }
+        .chart-card.full { grid-column:1 / -1; }
+        .chart-card.full .chart-wrapper { height:320px; }
+
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:24px; }
+        .stat-card { background:#fff; border-radius:var(--raio-md); padding:20px 18px; box-shadow:var(--sombra-md); display:flex; align-items:center; gap:14px; border:1px solid transparent; transition:var(--transicao); cursor:pointer; }
+        .stat-card:hover { border-color:var(--roxo-200); box-shadow:var(--sombra-lg); transform:translateY(-3px); }
+        .stat-card .stat-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+        .stat-card .stat-info .stat-number { font-size:1.6rem; font-weight:800; line-height:1; color:#1f1a2e; }
+        .stat-card .stat-info .stat-label { font-size:0.75rem; color:var(--cinza-500); font-weight:500; }
+        .stat-card.total .stat-icon{background:#ede0f7;color:var(--roxo-600);}
+        .stat-card.pendentes .stat-icon{background:#fef3c7;color:#b45309;}
+        .stat-card.urgentes .stat-icon{background:#fee2e2;color:#dc2626;}
+        .stat-card.enviados .stat-icon{background:#dbeafe;color:#2563eb;}
+        .stat-card.concluidos .stat-icon{background:#d1fae5;color:#059669;}
+        .stat-card.valores .stat-icon{background:#fce7f3;color:#be185d;}
+        .stat-card.active-filter { border-color:var(--roxo-500)!important; box-shadow:0 0 0 4px rgba(109,40,168,0.12)!important; background:var(--roxo-25)!important; }
+        .filters-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }
+        .filter-btn { padding:8px 18px; border-radius:20px; border:2px solid var(--cinza-300); background:#fff; cursor:pointer; font-weight:600; font-size:0.8rem; transition:var(--transicao); font-family:'Poppins',sans-serif; color:var(--cinza-700); white-space:nowrap; }
+        .filter-btn:hover { border-color:var(--roxo-300); color:var(--roxo-600); }
+        .filter-btn.active { background:var(--roxo-500); color:#fff; border-color:var(--roxo-500); }
+        .search-input { padding:9px 16px; border-radius:20px; border:2px solid var(--cinza-300); font-family:'Poppins',sans-serif; font-size:0.85rem; flex:1; min-width:180px; outline:none; transition:var(--transicao); background:#fff; }
+        .search-input:focus { border-color:var(--roxo-400); box-shadow:0 0 0 3px rgba(139,63,207,0.08); }
+        .btn-demo { padding:9px 18px; border-radius:20px; border:2px dashed var(--roxo-300); background:var(--roxo-25); cursor:pointer; font-weight:600; font-size:0.8rem; color:var(--roxo-600); transition:var(--transicao); font-family:'Poppins',sans-serif; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
+        .btn-demo:hover { background:var(--roxo-50); border-color:var(--roxo-500); }
+        .date-filter-input { padding:8px 12px; border-radius:20px; border:2px solid var(--cinza-300); font-family:'Poppins',sans-serif; font-size:0.8rem; outline:none; transition:var(--transicao); background:#fff; max-width:160px; color:#1f1a2e; }
+        .date-filter-input:focus { border-color:var(--roxo-400); box-shadow:0 0 0 3px rgba(139,63,207,0.08); }
+        .total-valor-filtrado { font-size:0.9rem; font-weight:600; color:var(--roxo-700); background:var(--roxo-25); border:2px solid var(--roxo-200); padding:8px 18px; border-radius:20px; display:inline-flex; align-items:center; gap:8px; margin-left:auto; }
+        .table-container { background:#fff; border-radius:var(--raio-lg); overflow:hidden; box-shadow:var(--sombra-md); border:1px solid var(--roxo-100); }
+        .table-wrapper { overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+        table thead { background:var(--roxo-50); }
+        table thead th { padding:14px 12px; text-align:left; font-weight:700; color:var(--roxo-700); font-size:0.78rem; letter-spacing:0.5px; text-transform:uppercase; white-space:nowrap; }
+        table tbody td { padding:12px; border-bottom:1px solid var(--roxo-50); vertical-align:middle; color:#3a3144; }
+        table tbody tr { transition:var(--transicao); }
+        table tbody tr:hover { background:#fdfbff; }
+        table tbody tr.total-row { background:var(--roxo-50); font-weight:700; }
+        table tbody tr.total-row td { color:var(--roxo-800); }
+        .badge { display:inline-block; padding:5px 12px; border-radius:20px; font-size:0.73rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; }
+        .badge-pendente{background:#fef3c7;color:#92400e;}
+        .badge-urgente{background:#fee2e2;color:#b91c1c;animation:pulseBadge 2s infinite;}
+        @keyframes pulseBadge{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4);}50%{box-shadow:0 0 0 8px rgba(239,68,68,0);}}
+        .badge-enviado{background:#dbeafe;color:#1d4ed8;}
+        .badge-concluido{background:#d1fae5;color:#065f46;}
+        .action-btn { width:34px; height:34px; border-radius:50%; border:none; cursor:pointer; font-size:0.8rem; transition:var(--transicao); display:inline-flex; align-items:center; justify-content:center; margin:0 2px; background:#f3f4f6; color:#4b5563; }
+        .action-btn:hover { background:var(--roxo-100); color:var(--roxo-600); }
+        .action-btn.delete:hover { background:#fee2e2; color:#dc2626; }
+        .action-btn.view:hover { background:#dbeafe; color:#2563eb; }
+        .empty-state { text-align:center; padding:50px 20px; color:var(--cinza-500); }
+        .empty-state i { font-size:60px; color:var(--roxo-200); margin-bottom:12px; }
+        .modal-overlay { position:fixed; inset:0; background:rgba(30,5,51,0.7); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.3s ease; backdrop-filter:blur(4px); }
+        @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+        .modal-dialog { background:#fff; border-radius:var(--raio-lg); width:100%; max-width:650px; max-height:85vh; overflow-y:auto; box-shadow:var(--sombra-xl); animation:scaleIn 0.3s ease; position:relative; }
+        @keyframes scaleIn{from{transform:scale(0.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+        .modal-header { padding:18px 24px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:#fff; z-index:2; border-radius:var(--raio-lg) var(--raio-lg) 0 0; }
+        .modal-header h3 { font-size:1.1rem; color:var(--roxo-800); display:flex; align-items:center; gap:8px; }
+        .modal-close { width:36px; height:36px; border-radius:50%; border:none; background:#f3f4f6; cursor:pointer; font-size:1rem; transition:var(--transicao); display:flex; align-items:center; justify-content:center; color:#6b7280; }
+        .modal-close:hover { background:#fee2e2; color:#dc2626; }
+        .modal-body { padding:20px 24px; }
+        .email-preview { background:#f9fafb; border:1px solid #e5e7eb; border-radius:var(--raio-sm); padding:16px; font-family:'Courier New',monospace; font-size:0.85rem; line-height:1.7; white-space:pre-wrap; color:#1f2937; max-height:300px; overflow-y:auto; margin-bottom:12px; }
+        .btn-copy { padding:10px 20px; background:var(--roxo-500); color:#fff; border:none; border-radius:25px; cursor:pointer; font-weight:600; font-family:'Poppins',sans-serif; transition:var(--transicao); font-size:0.85rem; display:flex; align-items:center; gap:6px; }
+        .btn-copy:hover { background:var(--roxo-600); }
+        .btn-copy.copied { background:#10b981!important; }
+        .btn-abrir-email { padding:10px 20px; background:#3b82f6; color:#fff; border:none; border-radius:25px; cursor:pointer; font-weight:600; font-family:'Poppins',sans-serif; transition:var(--transicao); font-size:0.85rem; display:flex; align-items:center; gap:6px; margin-right:8px; }
+        .btn-abrir-email:hover { background:#2563eb; box-shadow:0 4px 15px rgba(59,130,246,0.3); }
+        .alerta-email-cliente { background:#eff6ff; border:1px solid #bfdbfe; border-radius:var(--raio-sm); padding:12px 16px; margin-bottom:14px; font-size:0.82rem; color:#1e40af; display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
+        .alerta-email-cliente i { font-size:1.2rem; margin-top:1px; flex-shrink:0; }
+        .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .detail-item { display:flex; flex-direction:column; gap:2px; }
+        .detail-item .dl { font-size:0.7rem; color:#9ca3af; text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+        .detail-item .dv { font-size:0.9rem; color:#1f2937; font-weight:500; }
+        .detail-full { grid-column:1 / -1; }
+        .status-select { padding:8px 12px; border-radius:20px; border:2px solid var(--cinza-300); font-family:'Poppins',sans-serif; font-size:0.85rem; font-weight:600; cursor:pointer; background:#fff; }
+        .toast-container { position:fixed; top:20px; right:20px; z-index:2000; display:flex; flex-direction:column; gap:10px; }
+        .toast { padding:14px 20px; border-radius:30px; color:#fff; font-weight:600; font-size:0.85rem; box-shadow:var(--sombra-lg); animation:slideToast 0.4s ease, fadeOutToast 0.4s ease 2.8s forwards; display:flex; align-items:center; gap:8px; max-width:400px; }
+        .toast-success{background:#10b981;} .toast-error{background:#ef4444;} .toast-info{background:var(--roxo-500);}
+        @keyframes slideToast{from{transform:translateX(120%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+        @keyframes fadeOutToast{from{opacity:1;}to{opacity:0;transform:translateY(-10px);}}
+        @media (max-width:768px) {
+            .form-grid { grid-template-columns:1fr; }
+            .amostra-item { grid-template-columns:1fr 1fr auto; gap:8px; padding:12px 10px; }
+            .header-logo .brand-name { font-size:1.4rem; }
+            .header .admin-link { position:static; margin-top:8px; justify-content:center; }
+            .header { display:flex; flex-direction:column; align-items:center; }
+            .form-card { padding:24px 16px; }
+            .stats-grid { grid-template-columns:repeat(2,1fr); }
+            .btn-pdf { margin-left:0; width:100%; justify-content:center; }
+            .dash-filters { flex-direction:column; align-items:stretch; }
+            .dash-filter-group input { width:100%; max-width:none; }
+            .admin-tabs { width:100%; }
+            .admin-tab { flex:1; justify-content:center; }
+            .charts-grid { grid-template-columns:1fr; }
+        }
+        @media (max-width:480px) {
+            .amostra-item { grid-template-columns:1fr; gap:8px; padding:10px 8px; }
+            .amostra-item .btn-remover-amostra { position:absolute; top:6px; right:6px; margin-top:0; }
+            .detail-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particles">
+        <div class="bg-particle"></div><div class="bg-particle"></div><div class="bg-particle"></div>
+        <div class="bg-particle"></div><div class="bg-particle"></div><div class="bg-particle"></div>
+    </div>
+    <div class="app-container">
+        <header class="header" id="mainHeader">
+            <div class="header-logo">
+                <div class="logo-icon">📦</div>
+                <span class="brand-name">Dona Rita</span>
+                <span class="brand-sub">Embalagens</span>
+                <span class="brand-tag">✦ AMOSTRAS ✦</span>
+            </div>
+            <button class="admin-link" id="btnAdminLink"><i class="fas fa-lock"></i> Área do Administrador</button>
+            <button class="admin-link" id="btnVoltarSite" style="display:none;"><i class="fas fa-arrow-left"></i> Voltar ao Site</button>
+        </header>
+        <div class="main-content">
+            <div class="public-section" id="publicSection">
+                <div class="form-card">
+                    <div class="card-icon">🎁</div>
+                    <h2>Solicitação de Amostra</h2>
+                    <p class="subtitle">Preencha os dados abaixo para solicitar sua amostra</p>
+                    <div style="text-align:center; margin-bottom:18px;">
+                        <button class="btn-rastreio" id="btnConsultarRastreio" type="button">
+                            <i class="fas fa-search-location"></i> Consultar Rastreio
+                        </button>
+                    </div>
+                    <form id="formAmostra" novalidate>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label style="margin-bottom:4px;"><span class="req">*</span> Amostras de material desejadas</label>
+                                <div class="amostras-container" id="amostrasContainer">
+                                    <div class="amostra-item" data-index="0">
+                                        <div class="form-group"><label><span class="req">*</span> Qual amostra de material deseja?</label><input type="text" class="campo-material-amostra" placeholder="Ex: Sacola plástica personalizada..." required></div>
+                                        <div class="form-group"><label class="label-qtd"><span class="req">*</span> Quantidade</label><input type="text" class="campo-quantidade-amostra" placeholder="Ex: 5 unidades" required></div>
+                                        <button type="button" class="btn-remover-amostra" style="display:none;"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-adicionar-amostra" id="btnAdicionarAmostra" style="margin-top:8px;"><i class="fas fa-plus"></i> Adicionar outra amostra</button>
+                            </div>
+                            <div class="form-group"><label><span class="req">*</span> Previsão de envio</label><input type="date" id="campoPrazo" required></div>
+                            <div class="form-group"><label><span class="req">*</span> Nome de quem vai receber</label><input type="text" id="campoNome" placeholder="Nome completo" required></div>
+                            <div class="form-group"><label><span class="req">*</span> Empresa que vai receber</label><input type="text" id="campoEmpresa" placeholder="Nome da empresa" required></div>
+                            <div class="form-group full-width">
+                                <label><span class="req">*</span> Endereço completo</label>
+                                <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px;">
+                                    <input type="text" id="campoRua" placeholder="Rua" required>
+                                    <input type="text" id="campoNumero" placeholder="Número" required>
+                                    <input type="text" id="campoBairro" placeholder="Bairro" required>
+                                </div>
+                                <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; margin-top:10px;">
+                                    <input type="text" id="campoCidade" placeholder="Cidade" required>
+                                    <select id="campoEstado" required>
+                                        <option value="">UF</option>
+                                        <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                                    </select>
+                                    <input type="text" id="campoCep" placeholder="CEP" required>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label><span class="req">*</span> Tipo de envio</label>
+                                <div class="radio-group">
+                                    <div class="radio-option"><input type="radio" name="tipoEnvio" id="envioPedido" value="pedido_recente" required><label for="envioPedido"><i class="fas fa-box"></i> Possui pedido recente</label></div>
+                                    <div class="radio-option"><input type="radio" name="tipoEnvio" id="envioCorreio" value="correio"><label for="envioCorreio"><i class="fas fa-truck"></i> Via Correio</label></div>
+                                    <div class="radio-option"><input type="radio" name="tipoEnvio" id="envioTransportadora" value="transportadora"><label for="envioTransportadora"><i class="fas fa-shipping-fast"></i> Transportadora</label></div>
+                                    <div class="radio-option"><input type="radio" name="tipoEnvio" id="envioMotoristaDRT" value="motorista_drt"><label for="envioMotoristaDRT"><i class="fas fa-user-tie"></i> Via Motorista DRT</label></div>
+                                </div>
+                            </div>
+                            <div class="form-group full-width"><label>Número do pedido/proposta</label><input type="text" id="campoNotaFiscal" placeholder="Nº do pedido/proposta"></div>
+                            <div class="form-group"><label>Email para contato</label><input type="email" id="campoEmail" placeholder="email@exemplo.com"></div>
+                            <div class="form-group"><label>Telefone</label><input type="tel" id="campoTelefone" placeholder="(00) 00000-0000"></div>
+                            <div class="form-group full-width"><label>Observações adicionais</label><textarea id="campoObs" placeholder="Alguma informação extra relevante..."></textarea></div>
+                            <button type="submit" class="btn-submit"><span><i class="fas fa-paper-plane"></i> ENVIAR SOLICITAÇÃO</span></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="admin-section" id="adminLoginSection">
+                <div class="login-card">
+                    <div class="lock-icon">🔐</div>
+                    <h3>Área Restrita</h3>
+                    <p>Digite a senha para acessar o painel</p>
+                    <input type="password" id="campoSenha" placeholder="••••••••" autocomplete="off">
+                    <button class="btn-login" id="btnLogin"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+                    <p class="login-error" id="loginError">Senha incorreta. Tente novamente.</p>
+                </div>
+            </div>
+
+            <div class="admin-section" id="adminDashboardSection">
+                <div class="dashboard-header">
+                    <h2><i class="fas fa-chart-pie" style="color:var(--roxo-500);"></i> Painel de Amostras</h2>
+                    <button class="btn-sair" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                </div>
+
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="solicitacoes" type="button"><i class="fas fa-list-ul"></i> Solicitações</button>
+                    <button class="admin-tab" data-tab="relatorio" type="button"><i class="fas fa-chart-line"></i> Dashboard / Relatórios</button>
+                </div>
+
+                <!-- ===== ABA SOLICITAÇÕES ===== -->
+                <div class="admin-tab-content active" id="tabSolicitacoes">
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-card total" data-filter="todos"><div class="stat-icon"><i class="fas fa-inbox"></i></div><div class="stat-info"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div></div>
+                        <div class="stat-card pendentes" data-filter="pendente"><div class="stat-icon"><i class="fas fa-clock"></i></div><div class="stat-info"><div class="stat-number" id="statPendentes">0</div><div class="stat-label">Pendentes</div></div></div>
+                        <div class="stat-card urgentes" data-filter="urgente"><div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-info"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div></div>
+                        <div class="stat-card enviados" data-filter="enviado"><div class="stat-icon"><i class="fas fa-truck-fast"></i></div><div class="stat-info"><div class="stat-number" id="statEnviados">0</div><div class="stat-label">Enviados</div></div></div>
+                        <div class="stat-card concluidos" data-filter="concluido"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div class="stat-info"><div class="stat-number" id="statConcluidos">0</div><div class="stat-label">Concluídos</div></div></div>
+                        <div class="stat-card valores" data-filter="valor"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div class="stat-info"><div class="stat-number" id="statValores">R$ 0,00</div><div class="stat-label">Valor Enviado</div></div></div>
+                    </div>
+                    <div class="filters-bar">
+                        <button class="filter-btn active" data-filter="todos">Todos</button>
+                        <button class="filter-btn" data-filter="pendente">Pendentes</button>
+                        <button class="filter-btn" data-filter="urgente">Urgentes</button>
+                        <button class="filter-btn" data-filter="enviado">Enviados</button>
+                        <button class="filter-btn" data-filter="concluido">Concluídos</button>
+                        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar por empresa ou material...">
+                        <input type="month" class="date-filter-input" id="filtroMes" title="Filtrar por mês">
+                        <input type="date" class="date-filter-input" id="filtroDia" title="Filtrar por dia">
+                        <button class="btn-demo" id="btnLimparData" type="button"><i class="fas fa-times"></i> Limpar Data</button>
+                        <button class="btn-demo" id="btnDemo" type="button"><i class="fas fa-magic"></i> Dados demo</button>
+                        <div class="total-valor-filtrado" id="totalValorFiltrado">Valor Total: R$ 0,00</div>
+                    </div>
+                    <div class="table-container"><div class="table-wrapper"><table><thead><tr><th>Data</th><th>Empresa</th><th>Material</th><th>Qtd</th><th>Prazo</th><th>Status</th><th>Valor Envio</th><th>Ações</th></tr></thead><tbody id="tableBody"><tr class="empty-state"><td colspan="8"><i class="fas fa-box-open"></i><p>Carregando dados do servidor...</p></td></tr></tbody></table></div></div>
+                </div>
+
+                <!-- ===== ABA DASHBOARD / RELATÓRIOS ===== -->
+                <div class="admin-tab-content" id="tabRelatorio">
+                    <div class="dash-filters">
+                        <div class="dash-filter-group">
+                            <label for="dashFiltroMes"><i class="fas fa-calendar-alt"></i> Filtrar por Mês</label>
+                            <input type="month" id="dashFiltroMes" class="date-filter-input">
+                        </div>
+                        <div class="dash-filter-group">
+                            <label for="dashFiltroDia"><i class="fas fa-calendar-day"></i> Filtrar por Dia</label>
+                            <input type="date" id="dashFiltroDia" class="date-filter-input">
+                        </div>
+                        <button class="btn-demo" id="dashBtnHoje" type="button"><i class="fas fa-calendar-day"></i> Hoje</button>
+                        <button class="btn-demo" id="dashBtnMesAtual" type="button"><i class="fas fa-calendar-check"></i> Mês Atual</button>
+                        <button class="btn-demo" id="dashBtnLimpar" type="button"><i class="fas fa-times"></i> Limpar</button>
+                        <button class="btn-pdf" id="btnGerarPDF" type="button"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+                    </div>
+
+                    <div class="periodo-label" id="dashPeriodoLabel">
+                        <i class="fas fa-filter" style="color:var(--roxo-500);"></i>
+                        Período: <strong>Todos os registros</strong>
+                    </div>
+
+                    <div class="dash-cards">
+                        <div class="dash-card dc-purple">
+                            <div class="dc-icon"><i class="fas fa-inbox"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashTotalSolic">0</div><div class="dc-label">Solicitações</div></div>
+                        </div>
+                        <div class="dash-card dc-indigo">
+                            <div class="dc-icon"><i class="fas fa-users"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashClientes">0</div><div class="dc-label">Clientes Únicos</div></div>
+                        </div>
+                        <div class="dash-card dc-cyan">
+                            <div class="dc-icon"><i class="fas fa-cubes"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashItens">0</div><div class="dc-label">Itens Solicitados</div></div>
+                        </div>
+                        <div class="dash-card dc-green">
+                            <div class="dc-icon"><i class="fas fa-dollar-sign"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashValorTotal">R$ 0,00</div><div class="dc-label">Valor Total Envios</div></div>
+                        </div>
+                        <div class="dash-card dc-green">
+                            <div class="dc-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashConcluidos">0</div><div class="dc-label">Concluídos</div></div>
+                        </div>
+                        <div class="dash-card dc-yellow">
+                            <div class="dc-icon"><i class="fas fa-clock"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashPendentes">0</div><div class="dc-label">Pendentes</div></div>
+                        </div>
+                        <div class="dash-card dc-red">
+                            <div class="dc-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashUrgentes">0</div><div class="dc-label">Urgentes</div></div>
+                        </div>
+                        <div class="dash-card dc-blue">
+                            <div class="dc-icon"><i class="fas fa-truck-fast"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashEnviados">0</div><div class="dc-label">Enviados</div></div>
+                        </div>
+                        <div class="dash-card dc-purple">
+                            <div class="dc-icon"><i class="fas fa-percent"></i></div>
+                            <div class="dc-info"><div class="dc-value" id="dashTaxaConclusao">0%</div><div class="dc-label">Taxa de Conclusão</div></div>
+                        </div>
+                    </div>
+
+                    <!-- ===== GRÁFICOS ===== -->
+                    <div class="dash-section-title"><i class="fas fa-chart-bar"></i> Gráficos e Indicadores Visuais</div>
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <div class="chart-title"><i class="fas fa-chart-pie"></i> Quantidade de Solicitações por Status</div>
+                            <div class="chart-desc">Mostra <strong>quantas solicitações</strong> existem em cada status (Pendente, Urgente, Enviado, Concluído). Ideal para ver o volume de trabalho pendente.</div>
+                            <div class="chart-wrapper"><canvas id="chartStatus"></canvas></div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title"><i class="fas fa-chart-pie"></i> Valor Gasto (R$) por Status</div>
+                            <div class="chart-desc">Mostra o <strong>valor total em reais (R$)</strong> dos envios agrupados por status. Ajuda a ver onde o dinheiro está sendo gasto.</div>
+                            <div class="chart-wrapper"><canvas id="chartValorStatus"></canvas></div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title"><i class="fas fa-chart-bar"></i> Top 8 Clientes que Mais Gastaram (R$)</div>
+                            <div class="chart-desc">Ranking dos <strong>8 clientes com maior valor total em envios</strong>. Cada barra = um cliente. Quanto maior, mais gastou.</div>
+                            <div class="chart-wrapper"><canvas id="chartTopClientesValor"></canvas></div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title"><i class="fas fa-chart-bar"></i> Top 8 Clientes que Mais Solicitaram</div>
+                            <div class="chart-desc">Ranking dos <strong>8 clientes que mais fizeram pedidos de amostra</strong>. Cada barra = quantidade de solicitações do cliente.</div>
+                            <div class="chart-wrapper"><canvas id="chartTopClientesSolic"></canvas></div>
+                        </div>
+                        <div class="chart-card full">
+                            <div class="chart-title"><i class="fas fa-chart-line"></i> Evolução de Solicitações ao Longo dos Dias</div>
+                            <div class="chart-desc">Mostra <strong>quantas solicitações foram feitas em cada dia</strong>. A linha sobe quando há mais pedidos e desce quando há menos. Eixo X = datas, Eixo Y = quantidade.</div>
+                            <div class="chart-wrapper"><canvas id="chartEvolucao"></canvas></div>
+                        </div>
+                        <div class="chart-card full">
+                            <div class="chart-title"><i class="fas fa-chart-area"></i> Evolução do Valor Gasto (R$) ao Longo dos Dias</div>
+                            <div class="chart-desc">Mostra <strong>quanto foi gasto em reais a cada dia</strong>. Picos indicam dias com envios mais caros. Eixo X = datas, Eixo Y = valor em R$.</div>
+                            <div class="chart-wrapper"><canvas id="chartEvolucaoValor"></canvas></div>
+                        </div>
+                    </div>
+
+                    <div class="dash-section-title"><i class="fas fa-building"></i> Resumo por Cliente</div>
+                    <div class="table-container">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Cliente / Empresa</th>
+                                        <th>Solicitações</th>
+                                        <th>Itens</th>
+                                        <th>Valor Total</th>
+                                        <th>Concluídos</th>
+                                        <th>Pendentes</th>
+                                        <th>Urgentes</th>
+                                        <th>Enviados</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashClientesBody">
+                                    <tr class="empty-state"><td colspan="8"><i class="fas fa-users"></i><p>Sem dados no período</p></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="dash-section-title"><i class="fas fa-list-alt"></i> Detalhamento das Solicitações</div>
+                    <div class="table-container">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Empresa</th>
+                                        <th>Contato</th>
+                                        <th>Material</th>
+                                        <th>Qtd</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashDetalhesBody">
+                                    <tr class="empty-state"><td colspan="7"><i class="fas fa-box-open"></i><p>Sem dados no período</p></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalEmail" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-header"><h3><i class="fas fa-envelope" style="color:var(--roxo-500);"></i> Email Gerado</h3><button class="modal-close" onclick="fecharModal('modalEmail')">✕</button></div>
+            <div class="modal-body">
+                <div class="alerta-email-cliente" id="alertaEmailCliente"><i class="fas fa-info-circle"></i><span id="textoAlertaEmail">📧 Detectamos que você está usando <strong id="plataformaDetectada">seu dispositivo</strong>. Seu aplicativo de email padrão será aberto automaticamente. Caso não abra, utilize o botão abaixo.</span></div>
+                <p style="font-size:0.85rem;color:#6b7280;margin-bottom:8px;">📋 O email abaixo foi formatado com os dados da solicitação:</p>
+                <div class="email-preview" id="emailContent"></div>
+                <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <button class="btn-abrir-email" id="btnAbrirEmail" onclick="window.dispararMailtoAtual()"><i class="fas fa-envelope"></i> Abrir no Aplicativo de Email</button>
+                    <button class="btn-copy" id="btnCopy" onclick="copiarEmail()"><i class="fas fa-copy"></i> Copiar texto do email</button>
+                    <span style="font-size:0.8rem;color:#10b981;display:none;" id="copyFeedback">✓ Copiado!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalDetalhes" style="display:none;">
+        <div class="modal-dialog"><div class="modal-header"><h3><i class="fas fa-info-circle" style="color:var(--roxo-500);"></i> Detalhes da Solicitação</h3><button class="modal-close" onclick="fecharModal('modalDetalhes')">✕</button></div><div class="modal-body" id="detalhesContent"></div></div>
+    </div>
+
+    <div class="modal-overlay" id="modalRastreio" style="display:none;">
+        <div class="modal-dialog" style="max-width:500px;">
+            <div class="modal-header"><h3><i class="fas fa-search-location" style="color:var(--roxo-500);"></i> Consultar Rastreio</h3><button class="modal-close" onclick="fecharModal('modalRastreio')">✕</button></div>
+            <div class="modal-body">
+                <p style="font-size:0.9rem;color:var(--cinza-500);margin-bottom:12px;">Informe o <strong>ID da solicitação</strong> que você recebeu por e-mail para consultar o código de rastreio.</p>
+                <div class="form-group full-width" style="margin-bottom:16px;">
+                    <label>ID da Solicitação</label>
+                    <input type="text" id="inputIdRastreio" placeholder="Ex: AM-XXXXXXXX" style="text-transform:uppercase;">
+                </div>
+                <button class="btn-submit" id="btnBuscarRastreio" style="width:100%;margin-top:0;"><span><i class="fas fa-search"></i> Buscar Rastreio</span></button>
+                <div id="resultadoRastreio" style="margin-top:20px;display:none;">
+                    <div class="detail-grid">
+                        <div class="detail-item"><span class="dl">ID</span><span class="dv" id="rastreioId"></span></div>
+                        <div class="detail-item"><span class="dl">Status</span><span class="dv" id="rastreioStatus"></span></div>
+                        <div class="detail-item detail-full"><span class="dl">Código de Rastreio</span><span class="dv" id="rastreioCodigo" style="font-weight:700;color:var(--roxo-600);"></span></div>
+                    </div>
+                </div>
+                <div id="erroRastreio" style="margin-top:16px;display:none;color:#ef4444;text-align:center;font-weight:600;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+    <script type="importmap">
+        { "imports": { "firebase/app": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js", "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" } }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { getFirestore, collection, setDoc, getDocs, getDoc, updateDoc, deleteDoc, doc, query, orderBy, writeBatch } from "firebase/firestore";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCACo22Vzs-0sub0FwpWgI8OC2iuIXcgxc",
+            authDomain: "amostras-77a5b.firebaseapp.com",
+            projectId: "amostras-77a5b",
+            storageBucket: "amostras-77a5b.firebasestorage.app",
+            messagingSenderId: "595874836129",
+            appId: "1:595874836129:web:cc6aaf0107b35aa5ae0ae0",
+            measurementId: "G-42BYRJMFSZ"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const colecaoRef = collection(db, "amostras");
+
+        const ADMIN_SESSION_KEY = 'donaRita_adminAuth';
+        const SENHA_ADMIN = 'admin123';
+        const SEPARADOR = ' || ';
+        const EMAIL_DESTINO = 'amostras@donaritaembalagens.com.br';
+
+        const publicSection = document.getElementById('publicSection');
+        const adminLoginSection = document.getElementById('adminLoginSection');
+        const adminDashboardSection = document.getElementById('adminDashboardSection');
+        const btnAdminLink = document.getElementById('btnAdminLink');
+        const btnVoltarSite = document.getElementById('btnVoltarSite');
+        const formAmostra = document.getElementById('formAmostra');
+        const amostrasContainer = document.getElementById('amostrasContainer');
+        const btnAdicionarAmostra = document.getElementById('btnAdicionarAmostra');
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const btnDemo = document.getElementById('btnDemo');
+        const btnLogin = document.getElementById('btnLogin');
+        const btnLogout = document.getElementById('btnLogout');
+        const campoSenha = document.getElementById('campoSenha');
+        const loginError = document.getElementById('loginError');
+        const modalEmail = document.getElementById('modalEmail');
+        const modalDetalhes = document.getElementById('modalDetalhes');
+        const modalRastreio = document.getElementById('modalRastreio');
+        const emailContent = document.getElementById('emailContent');
+        const btnCopy = document.getElementById('btnCopy');
+        const copyFeedback = document.getElementById('copyFeedback');
+        const toastContainer = document.getElementById('toastContainer');
+        const statsGrid = document.getElementById('statsGrid');
+        const btnConsultarRastreio = document.getElementById('btnConsultarRastreio');
+        const inputIdRastreio = document.getElementById('inputIdRastreio');
+        const btnBuscarRastreio = document.getElementById('btnBuscarRastreio');
+        const resultadoRastreio = document.getElementById('resultadoRastreio');
+        const erroRastreio = document.getElementById('erroRastreio');
+        const totalValorFiltrado = document.getElementById('totalValorFiltrado');
+        const filtroMes = document.getElementById('filtroMes');
+        const filtroDia = document.getElementById('filtroDia');
+        const btnLimparData = document.getElementById('btnLimparData');
+
+        const dashFiltroMes = document.getElementById('dashFiltroMes');
+        const dashFiltroDia = document.getElementById('dashFiltroDia');
+        const dashBtnLimpar = document.getElementById('dashBtnLimpar');
+        const dashBtnHoje = document.getElementById('dashBtnHoje');
+        const dashBtnMesAtual = document.getElementById('dashBtnMesAtual');
+        const btnGerarPDF = document.getElementById('btnGerarPDF');
+        const dashPeriodoLabel = document.getElementById('dashPeriodoLabel');
+        const dashClientesBody = document.getElementById('dashClientesBody');
+        const dashDetalhesBody = document.getElementById('dashDetalhesBody');
+
+        let amostras = [];
+        let filtroAtual = 'todos';
+        let amostraEmailTemp = null;
+        let contadorItens = 1;
+        let mailtoUrlAtual = '';
+
+        const charts = {
+            status: null,
+            valorStatus: null,
+            topClientesValor: null,
+            topClientesSolic: null,
+            evolucao: null,
+            evolucaoValor: null
+        };
+
+        function getTipoEnvioLabel(t) { return { pedido_recente:'📦 Possui pedido recente (envio junto ao pedido)', correio:'🚚 Via Correio (envio separado)', transportadora:'🚛 Transportadora (envio por transportadora)', motorista_drt:'🧑‍💼 Via Motorista DRT (entrega direta)' }[t] || t || 'Não informado'; }
+        function getTipoEnvioLabelDetalhes(t) { return { pedido_recente:'📦 Possui pedido recente', correio:'🚚 Via Correio', transportadora:'🚛 Transportadora', motorista_drt:'🧑‍💼 Via Motorista DRT' }[t] || t || 'Não informado'; }
+        function getStatusLabel(s) { return { pendente:'Pendente', urgente:'⚠ Urgente', enviado:'Enviado', concluido:'Concluído' }[s] || s; }
+        function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str||''; return d.innerHTML; }
+        function formatarMoeda(v) { return 'R$ ' + (parseFloat(v)||0).toFixed(2).replace('.', ','); }
+
+        async function carregarDadosDoFirestore() {
+            try { const q = query(colecaoRef, orderBy("dataCriacao","desc")); const snap = await getDocs(q); amostras = snap.docs.map(d=>({id:d.id,...d.data()})); return amostras; }
+            catch(e) { console.error(e); showToast("Erro ao conectar com o servidor.","error"); amostras=[]; return []; }
+        }
+        async function salvarAmostraNoFirestore(amostra) { try { await setDoc(doc(db,"amostras",amostra.id),amostra); return true; } catch(e) { showToast("Erro ao salvar solicitação.","error"); return false; } }
+        async function atualizarAmostraNoFirestore(id,dados) { try { await updateDoc(doc(db,"amostras",id),dados); return true; } catch(e) { showToast("Erro ao atualizar.","error"); return false; } }
+        async function deletarAmostraNoFirestore(id) { try { await deleteDoc(doc(db,"amostras",id)); return true; } catch(e) { showToast("Erro ao excluir.","error"); return false; } }
+
+        function detectarPlataformaEmail() {
+            const ua = navigator.userAgent||''; const plat = navigator.platform||''; let s='', c='';
+            if(/Android/i.test(ua)){s='Android';c='Gmail / app de email do Android';}
+            else if(/iPhone|iPad|iPod/i.test(ua)||/Macintosh/i.test(ua)&&'ontouchend' in document){s='iOS';c='Apple Mail / app de email do iPhone';}
+            else if(/Macintosh|MacIntel|MacPPC|Mac68K/i.test(plat)||/Macintosh/i.test(ua)){s='macOS';c='Apple Mail / Outlook para Mac';}
+            else if(/Windows/i.test(plat)||/Windows/i.test(ua)){s='Windows';c='Outlook / Windows Mail';}
+            else if(/Linux/i.test(plat)||/Linux/i.test(ua)){s='Linux';c='Thunderbird / Evolution / cliente de email padrão';}
+            else{s='seu dispositivo';c='seu aplicativo de email padrão';}
+            if(/Chrome/i.test(ua)&&!/Android|iPhone|iPad/i.test(ua)) c+=' (ou Gmail no navegador)';
+            return {sistema:s,clienteEmail:c};
+        }
+        function atualizarAlertaEmail() {
+            const {sistema,clienteEmail}=detectarPlataformaEmail();
+            document.getElementById('plataformaDetectada').textContent=sistema;
+            document.getElementById('textoAlertaEmail').innerHTML=`📧 Detectamos que você está usando <strong>${sistema}</strong>. Seu aplicativo de email (<strong>${clienteEmail}</strong>) será aberto. Caso não abra automaticamente, utilize o botão "Abrir no Aplicativo de Email" abaixo.`;
+        }
+
+        function construirCorpoEmail(a) {
+            const prazoF = new Date(a.prazo+'T00:00:00').toLocaleDateString('pt-BR');
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            return `De: ${a.emailContato||'sistema@donaritaembalagens.com.br'}\nPara: ${EMAIL_DESTINO}\nAssunto: SOLICITAÇÃO DE AMOSTRA - ${a.empresa.toUpperCase()} - ${a.nomePessoa}\n\n═══════════════════════════════════\n📦 SOLICITAÇÃO DE AMOSTRA\n═══════════════════════════════════\n\n🏢 EMPRESA: ${a.empresa}\n👤 CONTATO: ${a.nomePessoa}\n📍 ENDEREÇO: ${a.endereco}\n📧 EMAIL: ${a.emailContato||'Não informado'}\n📞 TELEFONE: ${a.telefone||'Não informado'}\n\n───────────────────────────────────\n🎁 MATERIAIS SOLICITADOS:\n${formatarParaEmail(a.material)}\n\n📊 QUANTIDADES:\n${formatarParaEmail(a.quantidade)}\n───────────────────────────────────\n\n⏰ PREVISÃO DE ENVIO: ${prazoF}\n🚚 TIPO DE ENVIO: ${getTipoEnvioLabel(a.tipoEnvio)}\n📋 NÚMERO DO PEDIDO/PROPOSTA: ${a.notaFiscal||'Não informado'}\n\n📝 OBSERVAÇÕES: ${a.observacoes||'Nenhuma'}\n\n═══════════════════════════════════\nID: ${a.id}\nGerado pelo Sistema Dona Rita Amostras\nData: ${dataAtual}\n═══════════════════════════════════`;
+        }
+        function construirMailtoUrl(a) {
+            const assunto = `SOLICITAÇÃO DE AMOSTRA - ${a.empresa} - ${a.nomePessoa}`;
+            let url = `mailto:${EMAIL_DESTINO}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(construirCorpoEmail(a))}`;
+            return url.replace(/%0A/g,'%0D%0A');
+        }
+        function dispararMailto(a) {
+            mailtoUrlAtual = construirMailtoUrl(a);
+            try { const l=document.createElement('a'); l.href=mailtoUrlAtual; l.target='_blank'; l.rel='noopener noreferrer'; l.style.display='none'; document.body.appendChild(l); l.click(); document.body.removeChild(l); showToast('📧 Abrindo cliente de email...','info'); }
+            catch(e){ try{window.location.href=mailtoUrlAtual;showToast('📧 Abrindo cliente de email...','info');}catch(e2){showToast('Não foi possível abrir o email automaticamente.','error');} }
+        }
+        window.dispararMailtoAtual = () => {
+            if(mailtoUrlAtual) { try{ const l=document.createElement('a'); l.href=mailtoUrlAtual; l.target='_blank'; l.rel='noopener noreferrer'; l.style.display='none'; document.body.appendChild(l); l.click(); document.body.removeChild(l); }catch(e){window.location.href=mailtoUrlAtual;} }
+            else if(amostraEmailTemp) { dispararMailto(amostraEmailTemp); mailtoUrlAtual=construirMailtoUrl(amostraEmailTemp); }
+        };
+
+        function formatarParaEmail(str) { if(!str) return 'Nenhum'; if(!str.includes(SEPARADOR)) return str; return str.split(SEPARADOR).map(p=>'  • '+p.trim()).join('\n'); }
+        function formatarParaExibicao(str) { if(!str) return '—'; if(!str.includes(SEPARADOR)) return escapeHtml(str); return str.split(SEPARADOR).map(p=>escapeHtml(p.trim())).filter(p=>p).join('<br>'); }
+
+        function mostrarPublico() {
+            publicSection.classList.remove('hidden'); adminLoginSection.classList.remove('active'); adminDashboardSection.classList.remove('active');
+            btnAdminLink.style.display=''; btnVoltarSite.style.display='none'; limparFormulario();
+        }
+        function mostrarLogin() {
+            publicSection.classList.add('hidden'); adminLoginSection.classList.add('active'); adminDashboardSection.classList.remove('active');
+            btnAdminLink.style.display='none'; btnVoltarSite.style.display=''; campoSenha.value=''; loginError.classList.remove('show'); campoSenha.focus();
+        }
+        async function mostrarDashboard() {
+            publicSection.classList.add('hidden'); adminLoginSection.classList.remove('active'); adminDashboardSection.classList.add('active');
+            btnAdminLink.style.display='none'; btnVoltarSite.style.display='';
+            tableBody.innerHTML='<tr class="empty-state"><td colspan="8"><i class="fas fa-spinner fa-spin"></i><p>Carregando dados do servidor...</p></td></tr>';
+            await carregarDadosDoFirestore(); renderizarDashboard();
+        }
+
+        function setupEventListeners() {
+            btnAdminLink.addEventListener('click',()=>{ if(sessionStorage.getItem(ADMIN_SESSION_KEY)==='true') mostrarDashboard(); else mostrarLogin(); });
+            btnVoltarSite.addEventListener('click',()=>{ sessionStorage.removeItem(ADMIN_SESSION_KEY); mostrarPublico(); filtroAtual='todos'; searchInput.value=''; atualizarFiltrosAtivos(); amostras=[]; renderizarTabela(); });
+            btnLogin.addEventListener('click',fazerLogin); campoSenha.addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
+            btnLogout.addEventListener('click',()=>{ sessionStorage.removeItem(ADMIN_SESSION_KEY); mostrarPublico(); filtroAtual='todos'; searchInput.value=''; atualizarFiltrosAtivos(); amostras=[]; renderizarTabela(); showToast('Logout realizado com sucesso','info'); });
+            formAmostra.addEventListener('submit',handleSubmit); btnAdicionarAmostra.addEventListener('click',adicionarItemAmostra);
+            amostrasContainer.addEventListener('input',e=>{ if(e.target.classList.contains('campo-material-amostra')) atualizarLabelQuantidade(e.target); });
+            amostrasContainer.addEventListener('click',e=>{ const btn=e.target.closest('.btn-remover-amostra'); if(btn) removerItemAmostra(btn); });
+            document.querySelectorAll('.filter-btn').forEach(b=>b.addEventListener('click',()=>{filtroAtual=b.dataset.filter;atualizarFiltrosAtivos();renderizarTabela();}));
+            statsGrid.addEventListener('click',e=>{const card=e.target.closest('.stat-card');if(card&&card.dataset.filter){filtroAtual=card.dataset.filter;atualizarFiltrosAtivos();renderizarTabela();}});
+            searchInput.addEventListener('input',renderizarTabela); btnDemo.addEventListener('click',carregarDadosDemo);
+            filtroMes.addEventListener('input', renderizarTabela);
+            filtroDia.addEventListener('input', renderizarTabela);
+            btnLimparData.addEventListener('click', ()=>{ filtroMes.value=''; filtroDia.value=''; renderizarTabela(); });
+            [modalEmail,modalDetalhes,modalRastreio].forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.style.display='none';}));
+            document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(modalEmail.style.display==='flex')modalEmail.style.display='none';if(modalDetalhes.style.display==='flex')modalDetalhes.style.display='none';if(modalRastreio.style.display==='flex')modalRastreio.style.display='none';}});
+            document.getElementById('btnAbrirEmail').addEventListener('click',window.dispararMailtoAtual);
+            btnConsultarRastreio.addEventListener('click',()=>{ inputIdRastreio.value=''; resultadoRastreio.style.display='none'; erroRastreio.style.display='none'; modalRastreio.style.display='flex'; });
+            btnBuscarRastreio.addEventListener('click',consultarRastreio);
+
+            document.querySelectorAll('.admin-tab').forEach(tab=>{
+                tab.addEventListener('click',()=>{
+                    document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+                    document.querySelectorAll('.admin-tab-content').forEach(c=>c.classList.remove('active'));
+                    tab.classList.add('active');
+                    const target = document.getElementById('tab' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1));
+                    if(target) target.classList.add('active');
+                    if(tab.dataset.tab === 'relatorio') {
+                        renderizarRelatorio();
+                        setTimeout(renderizarGraficos, 80);
+                    }
+                });
+            });
+
+            dashFiltroMes.addEventListener('input', ()=>{ if(dashFiltroMes.value) dashFiltroDia.value=''; renderizarRelatorio(); setTimeout(renderizarGraficos, 80); });
+            dashFiltroDia.addEventListener('input', ()=>{ if(dashFiltroDia.value) dashFiltroMes.value=''; renderizarRelatorio(); setTimeout(renderizarGraficos, 80); });
+            dashBtnLimpar.addEventListener('click', ()=>{ dashFiltroMes.value=''; dashFiltroDia.value=''; renderizarRelatorio(); setTimeout(renderizarGraficos, 80); });
+            dashBtnHoje.addEventListener('click', ()=>{
+                const hoje = new Date();
+                const iso = new Date(hoje.getTime() - hoje.getTimezoneOffset()*60000).toISOString().slice(0,10);
+                dashFiltroDia.value = iso; dashFiltroMes.value=''; renderizarRelatorio(); setTimeout(renderizarGraficos, 80);
+            });
+            dashBtnMesAtual.addEventListener('click', ()=>{
+                const hoje = new Date();
+                const iso = new Date(hoje.getTime() - hoje.getTimezoneOffset()*60000).toISOString().slice(0,7);
+                dashFiltroMes.value = iso; dashFiltroDia.value=''; renderizarRelatorio(); setTimeout(renderizarGraficos, 80);
+            });
+            btnGerarPDF.addEventListener('click', gerarPDF);
+        }
+
+        async function consultarRastreio() {
+            const id = inputIdRastreio.value.trim().toUpperCase();
+            if(!id) { erroRastreio.textContent='Informe o ID da solicitação.'; erroRastreio.style.display='block'; resultadoRastreio.style.display='none'; return; }
+            try {
+                const docSnap = await getDoc(doc(db,"amostras",id));
+                if(!docSnap.exists()) { erroRastreio.textContent='Solicitação não encontrada. Verifique o ID.'; erroRastreio.style.display='block'; resultadoRastreio.style.display='none'; return; }
+                const dados = docSnap.data();
+                document.getElementById('rastreioId').textContent = id;
+                document.getElementById('rastreioStatus').textContent = getStatusLabel(dados.status);
+                document.getElementById('rastreioCodigo').textContent = dados.codigoRastreio || '⚠️ Ainda não foi cadastrado um código de rastreio para este pedido.';
+                resultadoRastreio.style.display='block'; erroRastreio.style.display='none';
+            } catch(e) { erroRastreio.textContent='Erro ao consultar. Tente novamente.'; erroRastreio.style.display='block'; resultadoRastreio.style.display='none'; }
+        }
+
+        function atualizarFiltrosAtivos() {
+            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+            document.querySelector(`.filter-btn[data-filter="${filtroAtual}"]`)?.classList.add('active');
+            document.querySelectorAll('.stat-card').forEach(c=>c.classList.remove('active-filter'));
+            document.querySelector(`.stat-card[data-filter="${filtroAtual}"]`)?.classList.add('active-filter');
+        }
+        function fazerLogin() {
+            if(campoSenha.value.trim()===SENHA_ADMIN){ sessionStorage.setItem(ADMIN_SESSION_KEY,'true'); loginError.classList.remove('show'); mostrarDashboard(); showToast('Bem-vindo(a) ao painel!','success'); }
+            else { loginError.classList.add('show'); campoSenha.value=''; campoSenha.focus(); showToast('Senha incorreta!','error'); }
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const dadosAmostras = coletarDadosAmostras();
+            const nome=document.getElementById('campoNome').value.trim(), empresa=document.getElementById('campoEmpresa').value.trim();
+            const prazo=document.getElementById('campoPrazo').value, tipoEnvioRadio=document.querySelector('input[name="tipoEnvio"]:checked');
+            const notaFiscal=document.getElementById('campoNotaFiscal').value.trim(), email=document.getElementById('campoEmail').value.trim(), telefone=document.getElementById('campoTelefone').value.trim(), obs=document.getElementById('campoObs').value.trim();
+
+            const rua=document.getElementById('campoRua').value.trim();
+            const numero=document.getElementById('campoNumero').value.trim();
+            const bairro=document.getElementById('campoBairro').value.trim();
+            const cidade=document.getElementById('campoCidade').value.trim();
+            const estado=document.getElementById('campoEstado').value;
+            const cep=document.getElementById('campoCep').value.trim();
+
+            const endereco = `${rua}, ${numero} - ${bairro}, ${cidade} - ${estado}, CEP ${cep}`;
+
+            let temErro=false;
+            if(!dadosAmostras.valido){showToast('Preencha todos os materiais e quantidades!','error');temErro=true;}
+
+            if(!rua||!numero||!bairro||!cidade||!estado||!cep){
+                showToast('Preencha todos os campos do endereço!','error');
+                if(!rua){document.getElementById('campoRua').style.borderColor='#ef4444';setTimeout(()=>document.getElementById('campoRua').style.borderColor='',2000);}
+                if(!numero){document.getElementById('campoNumero').style.borderColor='#ef4444';setTimeout(()=>document.getElementById('campoNumero').style.borderColor='',2000);}
+                if(!bairro){document.getElementById('campoBairro').style.borderColor='#ef4444';setTimeout(()=>document.getElementById('campoBairro').style.borderColor='',2000);}
+                if(!cidade){document.getElementById('campoCidade').style.borderColor='#ef4444';setTimeout(()=>document.getElementById('campoCidade').style.borderColor='',2000);}
+                if(!estado){document.getElementById('campoEstado').style.borderColor='#ef4444';setTimeout(()=>document.getElementById('campoEstado').style.borderColor='',2000);}
+                if(!cep){document.getElementById('campoCep').style.borderColor='#ef4444';setTimeout(()=>document.getElementById('campoCep').style.borderColor='',2000);}
+                temErro=true;
+            }
+
+            if(!nome||!empresa||!prazo||!tipoEnvioRadio){
+                showToast('Preencha todos os campos obrigatórios!','error');
+                [{el:document.getElementById('campoNome'),val:nome},{el:document.getElementById('campoEmpresa'),val:empresa},{el:document.getElementById('campoPrazo'),val:prazo}].forEach(i=>{if(!i.val){i.el.style.borderColor='#ef4444';setTimeout(()=>i.el.style.borderColor='',2000);}});
+                if(!tipoEnvioRadio){ document.querySelectorAll('input[name="tipoEnvio"]').forEach(r=>{const l=r.parentElement.querySelector('label');if(l)l.style.borderColor='#ef4444';}); setTimeout(()=>document.querySelectorAll('input[name="tipoEnvio"]').forEach(r=>{const l=r.parentElement.querySelector('label');if(l)l.style.borderColor='';}),2000); }
+                temErro=true;
+            }
+            if(temErro)return;
+            const hoje=new Date(); hoje.setHours(0,0,0,0); const dataPrazo=new Date(prazo+'T00:00:00'); const diffDias=Math.ceil((dataPrazo-hoje)/(1000*60*60*24));
+            const novaAmostra = {
+                id:'AM-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).substr(2,4).toUpperCase(),
+                dataCriacao:new Date().toISOString(), material:dadosAmostras.material, quantidade:dadosAmostras.quantidade,
+                nomePessoa:nome, endereco, empresa, prazo, tipoEnvio:tipoEnvioRadio.value, notaFiscal, emailContato:email, telefone, observacoes:obs,
+                status: diffDias<=3?'urgente':'pendente', codigoRastreio: null, valorEnvio: null
+            };
+            const btnSubmit=formAmostra.querySelector('.btn-submit'); const orig=btnSubmit.innerHTML; btnSubmit.innerHTML='<span><i class="fas fa-spinner fa-spin"></i> SALVANDO...</span>'; btnSubmit.disabled=true;
+            const sucesso=await salvarAmostraNoFirestore(novaAmostra);
+            btnSubmit.innerHTML=orig; btnSubmit.disabled=false;
+            if(sucesso){
+                amostras.unshift(novaAmostra); amostraEmailTemp=novaAmostra; mailtoUrlAtual=construirMailtoUrl(novaAmostra); limparFormulario();
+                showToast('✅ Solicitação registrada! Abrindo email...','success');
+                setTimeout(()=>dispararMailto(novaAmostra),400); setTimeout(()=>mostrarModalEmail(novaAmostra),800);
+                if(sessionStorage.getItem(ADMIN_SESSION_KEY)==='true'){await carregarDadosDoFirestore();renderizarDashboard();}
+            }
+        }
+
+        function limparFormulario() {
+            formAmostra.reset(); document.querySelectorAll('#formAmostra input, #formAmostra textarea, #formAmostra select').forEach(el=>el.style.borderColor='');
+            document.querySelectorAll('input[name="tipoEnvio"]').forEach(r=>{const l=r.parentElement.querySelector('label');if(l)l.style.borderColor='';});
+            inicializarPrimeiroItem();
+        }
+
+        function inicializarPrimeiroItem() {
+            contadorItens=1; while(amostrasContainer.children.length>1) amostrasContainer.lastChild.remove();
+            const primeiro=amostrasContainer.querySelector('.amostra-item');
+            if(primeiro){ primeiro.setAttribute('data-index','0'); primeiro.querySelector('.btn-remover-amostra').style.display='none'; primeiro.querySelector('.campo-material-amostra').value=''; primeiro.querySelector('.campo-quantidade-amostra').value=''; primeiro.querySelector('.label-qtd').innerHTML='<span class="req">*</span> Quantidade'; }
+            else { amostrasContainer.appendChild(criarItemAmostra(0)); }
+            contadorItens=amostrasContainer.children.length; atualizarBotoesRemover();
+        }
+        function criarItemAmostra(idx){ const d=document.createElement('div'); d.className='amostra-item'; d.setAttribute('data-index',idx); d.innerHTML=`<div class="form-group"><label><span class="req">*</span> Qual amostra de material deseja?</label><input type="text" class="campo-material-amostra" placeholder="Ex: Sacola plástica personalizada..." required></div><div class="form-group"><label class="label-qtd"><span class="req">*</span> Quantidade</label><input type="text" class="campo-quantidade-amostra" placeholder="Ex: 5 unidades" required></div><button type="button" class="btn-remover-amostra" title="Remover esta amostra"><i class="fas fa-times"></i></button>`; return d; }
+        function adicionarItemAmostra(){ contadorItens=amostrasContainer.children.length+1; const novo=criarItemAmostra(contadorItens-1); amostrasContainer.appendChild(novo); atualizarBotoesRemover(); setTimeout(()=>{novo.querySelector('.campo-material-amostra')?.focus(); novo.scrollIntoView({behavior:'smooth',block:'center'});},150); showToast('Nova amostra adicionada!','info'); }
+        function removerItemAmostra(btn){ if(amostrasContainer.children.length<=1){showToast('É necessário pelo menos uma amostra!','error');return;} const item=btn.closest('.amostra-item'); item.style.opacity='0'; item.style.transform='scale(0.95)'; item.style.transition='0.25s ease'; setTimeout(()=>{item.remove();reindexarItens();atualizarBotoesRemover();},250); }
+        function atualizarBotoesRemover(){ const itens=amostrasContainer.querySelectorAll('.amostra-item'); itens.forEach(i=>{const b=i.querySelector('.btn-remover-amostra'); if(b)b.style.display=itens.length>1?'flex':'none';}); }
+        function reindexarItens(){ const itens=amostrasContainer.querySelectorAll('.amostra-item'); itens.forEach((item,i)=>item.setAttribute('data-index',i)); contadorItens=itens.length; }
+        function atualizarLabelQuantidade(input){ const item=input.closest('.amostra-item'); const label=item.querySelector('.label-qtd'); const nome=input.value.trim(); if(label) label.innerHTML=nome.length>0?`<span class="req">*</span> Quantidade (${escapeHtml(nome)})`:'<span class="req">*</span> Quantidade'; }
+        function coletarDadosAmostras(){ const itens=amostrasContainer.querySelectorAll('.amostra-item'); const mat=[],qtd=[]; let val=true; itens.forEach(item=>{const mi=item.querySelector('.campo-material-amostra'),qi=item.querySelector('.campo-quantidade-amostra'); const m=mi?mi.value.trim():'', q=qi?qi.value.trim():''; mat.push(m||''); qtd.push(q||''); if(!m||!q){val=false; if(!m&&mi){mi.style.borderColor='#ef4444';setTimeout(()=>{if(mi)mi.style.borderColor='';},2500);} if(!q&&qi){qi.style.borderColor='#ef4444';setTimeout(()=>{if(qi)qi.style.borderColor='';},2500);}}}); return {material:mat.join(SEPARADOR),quantidade:qtd.join(SEPARADOR),valido:val&&mat.every(m=>m)&&qtd.every(q=>q)}; }
+
+        function renderizarDashboard(){ atualizarStats(); renderizarTabela(); atualizarFiltrosAtivos(); renderizarRelatorio(); setTimeout(renderizarGraficos, 80); }
+        function atualizarStats(){
+            document.getElementById('statTotal').textContent=amostras.length;
+            document.getElementById('statPendentes').textContent=amostras.filter(a=>a.status==='pendente').length;
+            document.getElementById('statUrgentes').textContent=amostras.filter(a=>a.status==='urgente').length;
+            document.getElementById('statEnviados').textContent=amostras.filter(a=>a.status==='enviado').length;
+            document.getElementById('statConcluidos').textContent=amostras.filter(a=>a.status==='concluido').length;
+            const totalValor = amostras.reduce((acc,a)=> acc + (parseFloat(a.valorEnvio)||0), 0);
+            document.getElementById('statValores').textContent = 'R$ '+totalValor.toFixed(2).replace('.', ',');
+        }
+        function getAmostrasFiltradas(){
+            let f=[...amostras];
+            if(filtroAtual!=='todos' && filtroAtual!=='valor') f=f.filter(a=>a.status===filtroAtual);
+            const b=searchInput.value.trim().toLowerCase();
+            if(b) f=f.filter(a=>(a.empresa||'').toLowerCase().includes(b)||(a.material||'').toLowerCase().includes(b)||(a.nomePessoa||'').toLowerCase().includes(b)||(a.id||'').toLowerCase().includes(b));
+            const mesVal = filtroMes.value;
+            const diaVal = filtroDia.value;
+            if(diaVal) {
+                f = f.filter(a => (a.dataCriacao||'').slice(0,10) === diaVal);
+            } else if(mesVal) {
+                f = f.filter(a => (a.dataCriacao||'').slice(0,7) === mesVal);
+            }
+            return f;
+        }
+        function renderizarTabela(){
+            const filtradas=getAmostrasFiltradas();
+            const totalValorFiltradoNumber = filtradas.reduce((acc,a)=> acc + (parseFloat(a.valorEnvio)||0), 0);
+            totalValorFiltrado.textContent = 'Valor Total: R$ '+totalValorFiltradoNumber.toFixed(2).replace('.', ',');
+            if(filtradas.length===0){ tableBody.innerHTML='<tr class="empty-state"><td colspan="8"><i class="fas fa-box-open"></i><p>Nenhuma solicitação encontrada</p></td></tr>'; return; }
+            tableBody.innerHTML = filtradas.map(a=>{
+                const dc=new Date(a.dataCriacao).toLocaleDateString('pt-BR'), pf=new Date(a.prazo+'T00:00:00').toLocaleDateString('pt-BR');
+                const valorExib = a.valorEnvio ? 'R$ '+parseFloat(a.valorEnvio).toFixed(2).replace('.', ',') : '—';
+                return `<tr><td title="${new Date(a.dataCriacao).toLocaleString('pt-BR')}">${dc}</td><td><strong>${escapeHtml(a.empresa)}</strong></td><td>${formatarParaExibicao(a.material)}</td><td>${formatarParaExibicao(a.quantidade)}</td><td>${pf}</td><td><span class="badge badge-${a.status}">${getStatusLabel(a.status)}</span></td><td>${valorExib}</td><td><button class="action-btn view" title="Ver detalhes" onclick="window.verDetalhes('${a.id.replace(/'/g,"\\'")}')"><i class="fas fa-eye"></i></button><button class="action-btn" title="Alterar status" onclick="window.menuStatus('${a.id.replace(/'/g,"\\'")}','${a.status}')"><i class="fas fa-edit"></i></button><button class="action-btn delete" title="Excluir" onclick="window.excluirAmostra('${a.id.replace(/'/g,"\\'")}')"><i class="fas fa-trash-alt"></i></button></td></tr>`;
+            }).join('');
+        }
+
+        /* ==========================================================
+           DASHBOARD / RELATÓRIOS
+           ========================================================== */
+
+        function parseNumeroQuantidade(str) {
+            if(!str) return 0;
+            return String(str).split(SEPARADOR).reduce((acc, parte) => {
+                const m = String(parte).match(/(\d+(?:[.,]\d+)?)/);
+                return acc + (m ? parseFloat(m[1].replace(',', '.')) : 0);
+            }, 0);
+        }
+
+        function getAmostrasDashboard() {
+            let lista = [...amostras];
+            const mes = dashFiltroMes.value;
+            const dia = dashFiltroDia.value;
+            if(dia) lista = lista.filter(a => (a.dataCriacao||'').slice(0,10) === dia);
+            else if(mes) lista = lista.filter(a => (a.dataCriacao||'').slice(0,7) === mes);
+            return lista;
+        }
+
+        function getPeriodoLabelTexto() {
+            if(dashFiltroDia.value) {
+                const d = new Date(dashFiltroDia.value + 'T00:00:00');
+                return 'Dia: ' + d.toLocaleDateString('pt-BR');
+            }
+            if(dashFiltroMes.value) {
+                const partes = dashFiltroMes.value.split('-');
+                const d = new Date(parseInt(partes[0]), parseInt(partes[1])-1, 1);
+                const texto = d.toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
+                return 'Mês: ' + texto.charAt(0).toUpperCase() + texto.slice(1);
+            }
+            return 'Todos os registros';
+        }
+
+        function agruparPorCliente(lista) {
+            const map = new Map();
+            lista.forEach(a => {
+                const key = (a.empresa||'—').trim() || '—';
+                if(!map.has(key)) map.set(key, {empresa:key, solicitacoes:0, itens:0, valor:0, concluidos:0, pendentes:0, urgentes:0, enviados:0});
+                const item = map.get(key);
+                item.solicitacoes++;
+                item.itens += parseNumeroQuantidade(a.quantidade);
+                item.valor += (parseFloat(a.valorEnvio)||0);
+                if(a.status==='concluido') item.concluidos++;
+                else if(a.status==='pendente') item.pendentes++;
+                else if(a.status==='urgente') item.urgentes++;
+                else if(a.status==='enviado') item.enviados++;
+            });
+            return Array.from(map.values()).sort((a,b) => b.valor - a.valor || b.solicitacoes - a.solicitacoes);
+        }
+
+        function calcularResumo(lista) {
+            const totalSolicitacoes = lista.length;
+            const clientesUnicos = new Set(lista.map(a => ((a.empresa||'').trim().toLowerCase())).filter(Boolean)).size;
+            const totalItens = lista.reduce((acc,a) => acc + parseNumeroQuantidade(a.quantidade), 0);
+            const valorTotal = lista.reduce((acc,a) => acc + (parseFloat(a.valorEnvio)||0), 0);
+            const concluidos = lista.filter(a => a.status === 'concluido').length;
+            const pendentes  = lista.filter(a => a.status === 'pendente').length;
+            const urgentes   = lista.filter(a => a.status === 'urgente').length;
+            const enviados   = lista.filter(a => a.status === 'enviado').length;
+            const taxaConclusao = totalSolicitacoes > 0 ? (concluidos / totalSolicitacoes) * 100 : 0;
+            return { totalSolicitacoes, clientesUnicos, totalItens, valorTotal, concluidos, pendentes, urgentes, enviados, taxaConclusao };
+        }
+
+        function renderizarRelatorio() {
+            if(!dashClientesBody || !dashDetalhesBody) return;
+            const lista = getAmostrasDashboard();
+            const r = calcularResumo(lista);
+
+            document.getElementById('dashTotalSolic').textContent = r.totalSolicitacoes;
+            document.getElementById('dashClientes').textContent = r.clientesUnicos;
+            document.getElementById('dashItens').textContent = r.totalItens;
+            document.getElementById('dashValorTotal').textContent = formatarMoeda(r.valorTotal);
+            document.getElementById('dashConcluidos').textContent = r.concluidos;
+            document.getElementById('dashPendentes').textContent = r.pendentes;
+            document.getElementById('dashUrgentes').textContent = r.urgentes;
+            document.getElementById('dashEnviados').textContent = r.enviados;
+            document.getElementById('dashTaxaConclusao').textContent = r.taxaConclusao.toFixed(1).replace('.', ',') + '%';
+
+            dashPeriodoLabel.innerHTML = `<i class="fas fa-filter" style="color:var(--roxo-500);"></i> Período: <strong>${escapeHtml(getPeriodoLabelTexto())}</strong> &nbsp;•&nbsp; ${r.totalSolicitacoes} registro(s)`;
+
+            const clientes = agruparPorCliente(lista);
+            if(clientes.length === 0) {
+                dashClientesBody.innerHTML = '<tr class="empty-state"><td colspan="8"><i class="fas fa-users"></i><p>Sem dados no período</p></td></tr>';
+            } else {
+                dashClientesBody.innerHTML = clientes.map(c => `
+                    <tr>
+                        <td><strong>${escapeHtml(c.empresa)}</strong></td>
+                        <td>${c.solicitacoes}</td>
+                        <td>${c.itens}</td>
+                        <td><strong style="color:var(--roxo-700);">${formatarMoeda(c.valor)}</strong></td>
+                        <td>${c.concluidos}</td>
+                        <td>${c.pendentes}</td>
+                        <td>${c.urgentes}</td>
+                        <td>${c.enviados}</td>
+                    </tr>`).join('') + `
+                    <tr class="total-row">
+                        <td>TOTAL GERAL</td>
+                        <td>${r.totalSolicitacoes}</td>
+                        <td>${r.totalItens}</td>
+                        <td>${formatarMoeda(r.valorTotal)}</td>
+                        <td>${r.concluidos}</td>
+                        <td>${r.pendentes}</td>
+                        <td>${r.urgentes}</td>
+                        <td>${r.enviados}</td>
+                    </tr>`;
+            }
+
+            if(lista.length === 0) {
+                dashDetalhesBody.innerHTML = '<tr class="empty-state"><td colspan="7"><i class="fas fa-box-open"></i><p>Sem dados no período</p></td></tr>';
+            } else {
+                dashDetalhesBody.innerHTML = lista.map(a => {
+                    const dc = new Date(a.dataCriacao).toLocaleDateString('pt-BR');
+                    const valorTxt = a.valorEnvio ? formatarMoeda(a.valorEnvio) : '—';
+                    return `<tr>
+                        <td>${dc}</td>
+                        <td><strong>${escapeHtml(a.empresa)}</strong></td>
+                        <td>${escapeHtml(a.nomePessoa||'—')}</td>
+                        <td>${formatarParaExibicao(a.material)}</td>
+                        <td>${formatarParaExibicao(a.quantidade)}</td>
+                        <td>${valorTxt}</td>
+                        <td><span class="badge badge-${a.status}">${getStatusLabel(a.status)}</span></td>
+                    </tr>`;
+                }).join('');
+            }
+        }
+
+        /* ===== GRÁFICOS ===== */
+        function destruirGrafico(chave) {
+            if(charts[chave]) { try { charts[chave].destroy(); } catch(e) {} charts[chave] = null; }
+        }
+
+        function renderizarGraficos() {
+            if(typeof Chart === 'undefined') return;
+            const lista = getAmostrasDashboard();
+            const periodo = getPeriodoLabelTexto();
+
+            const corRoxo = '#6d28a8';
+            const corAmarelo = '#f59e0b';
+            const corVermelho = '#ef4444';
+            const corAzul = '#3b82f6';
+            const corVerde = '#10b981';
+
+            // ===== 1. Solicitações por Status (rosca) =====
+            const contStatus = {
+                pendente: lista.filter(a=>a.status==='pendente').length,
+                urgente: lista.filter(a=>a.status==='urgente').length,
+                enviado: lista.filter(a=>a.status==='enviado').length,
+                concluido: lista.filter(a=>a.status==='concluido').length
+            };
+            destruirGrafico('status');
+            const ctxStatus = document.getElementById('chartStatus');
+            if(ctxStatus) {
+                charts.status = new Chart(ctxStatus, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pendente', 'Urgente', 'Enviado', 'Concluído'],
+                        datasets: [{
+                            data: [contStatus.pendente, contStatus.urgente, contStatus.enviado, contStatus.concluido],
+                            backgroundColor: [corAmarelo, corVermelho, corAzul, corVerde],
+                            borderColor: '#fff',
+                            borderWidth: 3,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Quantidade de Solicitações por Status',
+                                font: { family: 'Poppins', size: 13, weight: 'bold' },
+                                color: '#3b0f5e',
+                                padding: { top: 4, bottom: 4 }
+                            },
+                            subtitle: {
+                                display: true,
+                                text: 'Total no período: ' + lista.length + ' solicitações',
+                                font: { family: 'Poppins', size: 10, style: 'italic' },
+                                color: '#6b7280',
+                                padding: { bottom: 10 }
+                            },
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { family: 'Poppins', size: 11 },
+                                    padding: 12,
+                                    usePointStyle: true,
+                                    boxWidth: 8
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => {
+                                        const total = lista.length || 1;
+                                        const pct = ((c.parsed / total) * 100).toFixed(1);
+                                        return ` ${c.label}: ${c.parsed} (${pct}% do total)`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '58%'
+                    }
+                });
+            }
+
+            // ===== 2. Valor (R$) por Status =====
+            const valorStatus = {
+                pendente: lista.filter(a=>a.status==='pendente').reduce((s,a)=>s+(parseFloat(a.valorEnvio)||0),0),
+                urgente: lista.filter(a=>a.status==='urgente').reduce((s,a)=>s+(parseFloat(a.valorEnvio)||0),0),
+                enviado: lista.filter(a=>a.status==='enviado').reduce((s,a)=>s+(parseFloat(a.valorEnvio)||0),0),
+                concluido: lista.filter(a=>a.status==='concluido').reduce((s,a)=>s+(parseFloat(a.valorEnvio)||0),0)
+            };
+            destruirGrafico('valorStatus');
+            const ctxValorStatus = document.getElementById('chartValorStatus');
+            if(ctxValorStatus) {
+                charts.valorStatus = new Chart(ctxValorStatus, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Pendente', 'Urgente', 'Enviado', 'Concluído'],
+                        datasets: [{
+                            label: 'Valor Total (R$)',
+                            data: [valorStatus.pendente, valorStatus.urgente, valorStatus.enviado, valorStatus.concluido],
+                            backgroundColor: [corAmarelo, corVermelho, corAzul, corVerde],
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Valor Gasto (R$) por Status',
+                                font: { family: 'Poppins', size: 13, weight: 'bold' },
+                                color: '#3b0f5e',
+                                padding: { top: 4, bottom: 4 }
+                            },
+                            subtitle: {
+                                display: true,
+                                text: 'Valor total dos envios agrupado por status',
+                                font: { family: 'Poppins', size: 10, style: 'italic' },
+                                color: '#6b7280',
+                                padding: { bottom: 10 }
+                            },
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => ' ' + c.dataset.label + ': ' + formatarMoeda(c.parsed.y)
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Valor em R$',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { callback: (v)=> 'R$ '+Number(v).toFixed(0), font: { family: 'Poppins', size: 10 } },
+                                grid: { color: 'rgba(109,40,168,0.06)' }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Status da Solicitação',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { font: { family: 'Poppins', size: 10 } },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ===== 3. Top 8 clientes por valor =====
+            const clientes = agruparPorCliente(lista);
+            const topValor = [...clientes].sort((a,b)=>b.valor-a.valor).slice(0,8);
+            destruirGrafico('topClientesValor');
+            const ctxTopValor = document.getElementById('chartTopClientesValor');
+            if(ctxTopValor) {
+                charts.topClientesValor = new Chart(ctxTopValor, {
+                    type: 'bar',
+                    data: {
+                        labels: topValor.length ? topValor.map(c=>c.empresa.length>20?c.empresa.slice(0,20)+'…':c.empresa) : ['Sem dados'],
+                        datasets: [{
+                            label: 'Valor Total (R$)',
+                            data: topValor.length ? topValor.map(c=>c.valor) : [0],
+                            backgroundColor: topValor.map((_,i)=> {
+                                const cores = ['#6d28a8','#8b3fcf','#a868e6','#c99af7','#ec4899','#f59e0b','#10b981','#3b82f6'];
+                                return cores[i%cores.length];
+                            }),
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Top 8 Clientes que Mais Gastaram (R$)',
+                                font: { family: 'Poppins', size: 13, weight: 'bold' },
+                                color: '#3b0f5e',
+                                padding: { top: 4, bottom: 4 }
+                            },
+                            subtitle: {
+                                display: true,
+                                text: 'Ranking por valor total de envios',
+                                font: { family: 'Poppins', size: 10, style: 'italic' },
+                                color: '#6b7280',
+                                padding: { bottom: 10 }
+                            },
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => ' ' + formatarMoeda(c.parsed.x)
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Valor Total em R$',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { callback: (v)=> 'R$ '+Number(v).toFixed(0), font: { family: 'Poppins', size: 10 } },
+                                grid: { color: 'rgba(109,40,168,0.06)' }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Cliente / Empresa',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { font: { family: 'Poppins', size: 10 } },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ===== 4. Top 8 clientes por solicitações =====
+            const topSolic = [...clientes].sort((a,b)=>b.solicitacoes-a.solicitacoes).slice(0,8);
+            destruirGrafico('topClientesSolic');
+            const ctxTopSolic = document.getElementById('chartTopClientesSolic');
+            if(ctxTopSolic) {
+                charts.topClientesSolic = new Chart(ctxTopSolic, {
+                    type: 'bar',
+                    data: {
+                        labels: topSolic.length ? topSolic.map(c=>c.empresa.length>20?c.empresa.slice(0,20)+'…':c.empresa) : ['Sem dados'],
+                        datasets: [{
+                            label: 'Quantidade de Solicitações',
+                            data: topSolic.length ? topSolic.map(c=>c.solicitacoes) : [0],
+                            backgroundColor: topSolic.map((_,i)=> {
+                                const cores = ['#3b82f6','#6366f1','#8b5cf6','#a855f7','#ec4899','#f59e0b','#10b981','#06b6d4'];
+                                return cores[i%cores.length];
+                            }),
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Top 8 Clientes que Mais Solicitaram',
+                                font: { family: 'Poppins', size: 13, weight: 'bold' },
+                                color: '#3b0f5e',
+                                padding: { top: 4, bottom: 4 }
+                            },
+                            subtitle: {
+                                display: true,
+                                text: 'Ranking por quantidade de pedidos de amostra',
+                                font: { family: 'Poppins', size: 10, style: 'italic' },
+                                color: '#6b7280',
+                                padding: { bottom: 10 }
+                            },
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => ' ' + c.parsed.x + ' solicitação(ões)'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Quantidade de Solicitações',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { precision: 0, font: { family: 'Poppins', size: 10 } },
+                                grid: { color: 'rgba(109,40,168,0.06)' }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Cliente / Empresa',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { font: { family: 'Poppins', size: 10 } },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ===== 5. Evolução de solicitações por dia =====
+            const mapaDia = {};
+            lista.forEach(a => {
+                const dia = (a.dataCriacao||'').slice(0,10);
+                if(!dia) return;
+                if(!mapaDia[dia]) mapaDia[dia] = { solicitacoes:0, valor:0 };
+                mapaDia[dia].solicitacoes++;
+                mapaDia[dia].valor += (parseFloat(a.valorEnvio)||0);
+            });
+            const diasOrdenados = Object.keys(mapaDia).sort();
+            const labelsDia = diasOrdenados.map(d => {
+                const dt = new Date(d + 'T00:00:00');
+                return dt.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
+            });
+            const dadosDia = diasOrdenados.map(d => mapaDia[d].solicitacoes);
+
+            destruirGrafico('evolucao');
+            const ctxEvol = document.getElementById('chartEvolucao');
+            if(ctxEvol) {
+                charts.evolucao = new Chart(ctxEvol, {
+                    type: 'line',
+                    data: {
+                        labels: labelsDia.length ? labelsDia : ['Sem dados'],
+                        datasets: [{
+                            label: 'Solicitações por dia',
+                            data: dadosDia.length ? dadosDia : [0],
+                            borderColor: corRoxo,
+                            backgroundColor: 'rgba(109,40,168,0.12)',
+                            borderWidth: 3,
+                            tension: 0.35,
+                            fill: true,
+                            pointBackgroundColor: corRoxo,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Evolução de Solicitações por Dia',
+                                font: { family: 'Poppins', size: 13, weight: 'bold' },
+                                color: '#3b0f5e',
+                                padding: { top: 4, bottom: 4 }
+                            },
+                            subtitle: {
+                                display: true,
+                                text: 'Período: ' + periodo + ' | Total: ' + lista.length + ' solicitações',
+                                font: { family: 'Poppins', size: 10, style: 'italic' },
+                                color: '#6b7280',
+                                padding: { bottom: 10 }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                align: 'end',
+                                labels: { font: { family: 'Poppins', size: 10 }, usePointStyle: true, boxWidth: 8 }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => ' ' + c.parsed.y + ' solicitação(ões)'
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Quantidade de Solicitações',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { precision: 0, font: { family: 'Poppins', size: 10 } },
+                                grid: { color: 'rgba(109,40,168,0.06)' }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Data (dia/mês)',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { font: { family: 'Poppins', size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 14 },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ===== 6. Evolução do valor por dia =====
+            const dadosValorDia = diasOrdenados.map(d => mapaDia[d].valor);
+            destruirGrafico('evolucaoValor');
+            const ctxEvolValor = document.getElementById('chartEvolucaoValor');
+            if(ctxEvolValor) {
+                charts.evolucaoValor = new Chart(ctxEvolValor, {
+                    type: 'line',
+                    data: {
+                        labels: labelsDia.length ? labelsDia : ['Sem dados'],
+                        datasets: [{
+                            label: 'Valor gasto por dia (R$)',
+                            data: dadosValorDia.length ? dadosValorDia : [0],
+                            borderColor: corVerde,
+                            backgroundColor: 'rgba(16,185,129,0.14)',
+                            borderWidth: 3,
+                            tension: 0.35,
+                            fill: true,
+                            pointBackgroundColor: corVerde,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Evolução do Valor Gasto (R$) por Dia',
+                                font: { family: 'Poppins', size: 13, weight: 'bold' },
+                                color: '#3b0f5e',
+                                padding: { top: 4, bottom: 4 }
+                            },
+                            subtitle: {
+                                display: true,
+                                text: 'Período: ' + periodo + ' | Total: ' + formatarMoeda(lista.reduce((s,a)=>s+(parseFloat(a.valorEnvio)||0),0)),
+                                font: { family: 'Poppins', size: 10, style: 'italic' },
+                                color: '#6b7280',
+                                padding: { bottom: 10 }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                align: 'end',
+                                labels: { font: { family: 'Poppins', size: 10 }, usePointStyle: true, boxWidth: 8 }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => ' ' + formatarMoeda(c.parsed.y)
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Valor em R$',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { callback: (v)=> 'R$ '+Number(v).toFixed(0), font: { family: 'Poppins', size: 10 } },
+                                grid: { color: 'rgba(16,185,129,0.08)' }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Data (dia/mês)',
+                                    font: { family: 'Poppins', size: 10, weight: 'bold' },
+                                    color: '#6b7280'
+                                },
+                                ticks: { font: { family: 'Poppins', size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 14 },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        /* ===== PDF ===== */
+        function gerarPDF() {
+            if(!window.jspdf || !window.jspdf.jsPDF) {
+                showToast('Biblioteca de PDF não carregada. Verifique sua conexão e recarregue a página.', 'error');
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            const lista = getAmostrasDashboard();
+            const r = calcularResumo(lista);
+            const periodo = getPeriodoLabelTexto();
+            const agora = new Date().toLocaleString('pt-BR');
+            const nomeArquivo = 'relatorio-amostras-' + new Date().toISOString().slice(0,10) + '.pdf';
+
+            const btn = btnGerarPDF;
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando...';
+            btn.disabled = true;
+
+            try {
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const roxoRgb = [109, 40, 168];
+                const roxoClaroRgb = [139, 63, 207];
+
+                doc.setFillColor(roxoRgb[0], roxoRgb[1], roxoRgb[2]);
+                doc.rect(0, 0, 210, 30, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(18);
+                doc.text('Dona Rita Embalagens', 14, 14);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(11);
+                doc.text('Relatório de Amostras', 14, 22);
+
+                doc.setTextColor(60, 60, 60);
+                doc.setFontSize(10);
+                doc.text('Período: ' + periodo, 14, 40);
+                doc.text('Gerado em: ' + agora, 14, 46);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(roxoRgb[0], roxoRgb[1], roxoRgb[2]);
+                doc.text('Resumo Geral', 14, 55);
+
+                const resumoBody = [
+                    ['Total de Solicitações', String(r.totalSolicitacoes)],
+                    ['Clientes Únicos', String(r.clientesUnicos)],
+                    ['Itens Solicitados', String(r.totalItens)],
+                    ['Valor Total de Envios', formatarMoeda(r.valorTotal)],
+                    ['Concluídos', String(r.concluidos)],
+                    ['Pendentes', String(r.pendentes)],
+                    ['Urgentes', String(r.urgentes)],
+                    ['Enviados', String(r.enviados)],
+                    ['Taxa de Conclusão', r.taxaConclusao.toFixed(1).replace('.', ',') + '%']
+                ];
+
+                doc.autoTable({
+                    startY: 58,
+                    head: [['Indicador', 'Valor']],
+                    body: resumoBody,
+                    theme: 'grid',
+                    headStyles: { fillColor: roxoRgb, textColor: 255, fontStyle: 'bold', fontSize: 9 },
+                    styles: { fontSize: 9, cellPadding: 2.4, textColor: [40, 40, 40] },
+                    columnStyles: {
+                        0: { fontStyle: 'bold', cellWidth: 100 },
+                        1: { cellWidth: 80, halign: 'right' }
+                    },
+                    alternateRowStyles: { fillColor: [250, 246, 253] }
+                });
+
+                let yGraf = doc.lastAutoTable.finalY + 10;
+                if(yGraf > 220) { doc.addPage(); yGraf = 20; }
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(roxoRgb[0], roxoRgb[1], roxoRgb[2]);
+                doc.text('Gráficos', 14, yGraf);
+
+                const tentarAdicionarImagem = (chave, x, y, w, h) => {
+                    const grafico = charts[chave];
+                    if(grafico && grafico.canvas) {
+                        try {
+                            const imgData = grafico.canvas.toDataURL('image/png', 1.0);
+                            doc.addImage(imgData, 'PNG', x, y, w, h);
+                            return true;
+                        } catch(e) { return false; }
+                    }
+                    return false;
+                };
+
+                const larguraImg = 88;
+                const alturaImg = 60;
+                const col1X = 14;
+                const col2X = 108;
+
+                let yImg = yGraf + 4;
+                tentarAdicionarImagem('status', col1X, yImg, larguraImg, alturaImg);
+                tentarAdicionarImagem('valorStatus', col2X, yImg, larguraImg, alturaImg);
+                yImg += alturaImg + 6;
+
+                if(yImg + alturaImg > 280) { doc.addPage(); yImg = 20; }
+                tentarAdicionarImagem('topClientesValor', col1X, yImg, larguraImg, alturaImg);
+                tentarAdicionarImagem('topClientesSolic', col2X, yImg, larguraImg, alturaImg);
+                yImg += alturaImg + 6;
+
+                if(yImg + alturaImg > 280) { doc.addPage(); yImg = 20; }
+                tentarAdicionarImagem('evolucao', col1X, yImg, 182, 65);
+                yImg += 70;
+                if(yImg + 65 > 280) { doc.addPage(); yImg = 20; }
+                tentarAdicionarImagem('evolucaoValor', col1X, yImg, 182, 65);
+
+                doc.addPage();
+                let y = 20;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(roxoRgb[0], roxoRgb[1], roxoRgb[2]);
+                doc.text('Resumo por Cliente', 14, y);
+
+                const clientes = agruparPorCliente(lista);
+                const clientesBody = clientes.length
+                    ? clientes.map(c => [c.empresa, c.solicitacoes, c.itens, formatarMoeda(c.valor), c.concluidos, c.pendentes, c.urgentes, c.enviados])
+                    : [['Nenhum dado no período', '', '', '', '', '', '', '']];
+
+                doc.autoTable({
+                    startY: y + 3,
+                    head: [['Cliente', 'Solic.', 'Itens', 'Valor', 'Concl.', 'Pend.', 'Urg.', 'Env.']],
+                    body: clientesBody,
+                    theme: 'striped',
+                    headStyles: { fillColor: roxoClaroRgb, textColor: 255, fontStyle: 'bold', fontSize: 8 },
+                    styles: { fontSize: 8, cellPadding: 2, textColor: [40, 40, 40] },
+                    columnStyles: {
+                        0: { cellWidth: 60 },
+                        1: { cellWidth: 15, halign: 'center' },
+                        2: { cellWidth: 15, halign: 'center' },
+                        3: { cellWidth: 25, halign: 'right' },
+                        4: { cellWidth: 15, halign: 'center' },
+                        5: { cellWidth: 15, halign: 'center' },
+                        6: { cellWidth: 15, halign: 'center' },
+                        7: { cellWidth: 15, halign: 'center' }
+                    }
+                });
+
+                y = doc.lastAutoTable.finalY + 10;
+                if(y > 235) { doc.addPage(); y = 20; }
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(roxoRgb[0], roxoRgb[1], roxoRgb[2]);
+                doc.text('Detalhamento das Solicitações', 14, y);
+
+                const detalhesBody = lista.length
+                    ? lista.map(a => {
+                        const dataTxt = new Date(a.dataCriacao).toLocaleDateString('pt-BR');
+                        const materialTxt = (a.material || '—').split(SEPARADOR).join(' / ');
+                        const qtdTxt = (a.quantidade || '—').split(SEPARADOR).join(' / ');
+                        const valorTxt = a.valorEnvio ? formatarMoeda(a.valorEnvio) : '—';
+                        return [
+                            dataTxt,
+                            a.empresa || '—',
+                            a.nomePessoa || '—',
+                            materialTxt,
+                            qtdTxt,
+                            valorTxt,
+                            getStatusLabel(a.status)
+                        ];
+                    })
+                    : [['—', 'Nenhuma solicitação no período', '', '', '', '', '']];
+
+                doc.autoTable({
+                    startY: y + 3,
+                    head: [['Data', 'Empresa', 'Contato', 'Material', 'Qtd', 'Valor', 'Status']],
+                    body: detalhesBody,
+                    theme: 'striped',
+                    headStyles: { fillColor: roxoRgb, textColor: 255, fontStyle: 'bold', fontSize: 8 },
+                    styles: { fontSize: 7.5, cellPadding: 2, overflow: 'linebreak', textColor: [40, 40, 40] },
+                    columnStyles: {
+                        0: { cellWidth: 18 },
+                        1: { cellWidth: 32 },
+                        2: { cellWidth: 25 },
+                        3: { cellWidth: 48 },
+                        4: { cellWidth: 24 },
+                        5: { cellWidth: 20 },
+                        6: { cellWidth: 20 }
+                    }
+                });
+
+                const pageCount = doc.internal.getNumberOfPages();
+                for(let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text('Dona Rita Embalagens — Sistema de Amostras', 14, 292);
+                    doc.text('Página ' + i + ' de ' + pageCount, 196, 292, { align: 'right' });
+                    doc.setDrawColor(220, 220, 220);
+                    doc.line(14, 288, 196, 288);
+                }
+
+                doc.save(nomeArquivo);
+                showToast('✅ PDF gerado com sucesso!', 'success');
+            } catch(err) {
+                console.error(err);
+                showToast('Erro ao gerar PDF. Tente novamente.', 'error');
+            } finally {
+                btn.innerHTML = orig;
+                btn.disabled = false;
+            }
+        }
+
+        function mostrarModalEmail(a){
+            emailContent.textContent = construirCorpoEmail(a); btnCopy.classList.remove('copied'); btnCopy.innerHTML='<i class="fas fa-copy"></i> Copiar texto do email'; copyFeedback.style.display='none';
+            mailtoUrlAtual=construirMailtoUrl(a); amostraEmailTemp=a; atualizarAlertaEmail(); modalEmail.style.display='flex';
+        }
+
+        window.verDetalhes = function(id) {
+            const a = amostras.find(x=>x.id===id); if(!a) return;
+            const pf=new Date(a.prazo+'T00:00:00').toLocaleDateString('pt-BR'), dc=new Date(a.dataCriacao).toLocaleString('pt-BR');
+            document.getElementById('detalhesContent').innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="dl">ID</span><span class="dv">${a.id}</span></div>
+                    <div class="detail-item"><span class="dl">Data</span><span class="dv">${dc}</span></div>
+                    <div class="detail-item"><span class="dl">Empresa</span><span class="dv">${escapeHtml(a.empresa)}</span></div>
+                    <div class="detail-item"><span class="dl">Contato</span><span class="dv">${escapeHtml(a.nomePessoa)}</span></div>
+                    <div class="detail-item detail-full"><span class="dl">Endereço</span><span class="dv">${escapeHtml(a.endereco)}</span></div>
+                    <div class="detail-item detail-full"><span class="dl">Materiais</span><span class="dv">${formatarParaExibicao(a.material)}</span></div>
+                    <div class="detail-item detail-full"><span class="dl">Quantidades</span><span class="dv">${formatarParaExibicao(a.quantidade)}</span></div>
+                    <div class="detail-item"><span class="dl">Previsão de envio</span><span class="dv">${pf}</span></div>
+                    <div class="detail-item"><span class="dl">Envio</span><span class="dv">${getTipoEnvioLabelDetalhes(a.tipoEnvio)}</span></div>
+                    <div class="detail-item"><span class="dl">Nº Pedido/Proposta</span><span class="dv">${a.notaFiscal||'Não informado'}</span></div>
+                    <div class="detail-item"><span class="dl">Status</span><span class="dv"><span class="badge badge-${a.status}">${getStatusLabel(a.status)}</span></span></div>
+                    <div class="detail-item detail-full"><span class="dl">Obs</span><span class="dv">${a.observacoes||'Nenhuma'}</span></div>
+                    <div class="detail-item detail-full">
+                        <span class="dl">Código de Rastreio</span>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <input type="text" id="inputRastreio_${a.id}" value="${a.codigoRastreio||''}" placeholder="Ex: AA123456789BR" style="flex:1;padding:8px 12px;border:2px solid var(--cinza-300);border-radius:20px;font-family:'Poppins',sans-serif;">
+                            <button class="btn-copy" style="white-space:nowrap;" onclick="window.salvarDadosExtras('${a.id.replace(/'/g,"\\'")}')"><i class="fas fa-save"></i> Salvar</button>
+                        </div>
+                    </div>
+                    <div class="detail-item detail-full">
+                        <span class="dl">Valor do Envio (R$)</span>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <input type="number" step="0.01" min="0" id="inputValorEnvio_${a.id}" value="${a.valorEnvio||''}" placeholder="Ex: 25.90" style="flex:1;padding:8px 12px;border:2px solid var(--cinza-300);border-radius:20px;font-family:'Poppins',sans-serif;">
+                            <button class="btn-copy" style="white-space:nowrap;" onclick="window.salvarValorEnvio('${a.id.replace(/'/g,"\\'")}')"><i class="fas fa-save"></i> Salvar Valor</button>
+                        </div>
+                    </div>
+                    <div class="detail-item detail-full">
+                        <span class="dl">Alterar Status</span>
+                        <select class="status-select" onchange="window.alterarStatus('${a.id.replace(/'/g,"\\'")}', this.value)">
+                            <option value="pendente" ${a.status==='pendente'?'selected':''}>Pendente</option>
+                            <option value="urgente" ${a.status==='urgente'?'selected':''}>⚠ Urgente</option>
+                            <option value="enviado" ${a.status==='enviado'?'selected':''}>Enviado</option>
+                            <option value="concluido" ${a.status==='concluido'?'selected':''}>Concluído</option>
+                        </select>
+                    </div>
+                </div>`;
+            modalDetalhes.style.display='flex';
+        };
+
+        window.salvarDadosExtras = async function(id) {
+            const inputRastreio = document.getElementById(`inputRastreio_${id}`);
+            const inputValor = document.getElementById(`inputValorEnvio_${id}`);
+            if(!inputRastreio || !inputValor) return;
+            const codigo = inputRastreio.value.trim();
+            const valor = inputValor.value.trim();
+            const valorNum = valor ? parseFloat(valor) : null;
+            const sucesso = await atualizarAmostraNoFirestore(id, { codigoRastreio: codigo || null, valorEnvio: valorNum });
+            if(sucesso) {
+                const amostra = amostras.find(a=>a.id===id);
+                if(amostra){ amostra.codigoRastreio = codigo || null; amostra.valorEnvio = valorNum; }
+                showToast('Código de rastreio e valor salvos com sucesso!', 'success');
+                renderizarDashboard();
+            }
+        };
+
+        window.salvarValorEnvio = async function(id) {
+            const inputValor = document.getElementById(`inputValorEnvio_${id}`);
+            if(!inputValor) return;
+            const valor = inputValor.value.trim();
+            const valorNum = valor ? parseFloat(valor) : null;
+            const sucesso = await atualizarAmostraNoFirestore(id, { valorEnvio: valorNum });
+            if(sucesso) {
+                const amostra = amostras.find(a=>a.id===id);
+                if(amostra){ amostra.valorEnvio = valorNum; }
+                showToast('Valor de envio salvo com sucesso!', 'success');
+                renderizarDashboard();
+            }
+        };
+
+        window.alterarStatus = async function(id, novoStatus) {
+            const amostra = amostras.find(a=>a.id===id);
+            let valorEnvio = amostra ? amostra.valorEnvio : null;
+            if(novoStatus === 'concluido' && (valorEnvio === null || valorEnvio === undefined)) {
+                const resposta = prompt('Digite o valor do envio (R$):', '');
+                if(resposta !== null) {
+                    const valorNum = parseFloat(resposta.replace(',', '.'));
+                    if(!isNaN(valorNum)) {
+                        valorEnvio = valorNum;
+                        await atualizarAmostraNoFirestore(id, { status: novoStatus, valorEnvio: valorEnvio });
+                        if(amostra){ amostra.status = novoStatus; amostra.valorEnvio = valorEnvio; }
+                        renderizarDashboard();
+                        showToast(`Status alterado para "${getStatusLabel(novoStatus)}" e valor salvo.`, 'info');
+                        return;
+                    } else {
+                        showToast('Valor inválido! Tente novamente.', 'error');
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            } else {
+                const sucesso = await atualizarAmostraNoFirestore(id, { status: novoStatus });
+                if(sucesso){ const a=amostras.find(a=>a.id===id); if(a)a.status=novoStatus; renderizarDashboard(); showToast(`Status alterado para "${getStatusLabel(novoStatus)}"`,'info'); }
+            }
+        };
+
+        window.excluirAmostra = async function(id) {
+            if(!confirm('Tem certeza que deseja excluir esta solicitação?')) return;
+            const sucesso = await deletarAmostraNoFirestore(id);
+            if(sucesso){ amostras=amostras.filter(a=>a.id!==id); renderizarDashboard(); showToast('Solicitação excluída com sucesso!','success'); }
+        };
+        window.menuStatus = function(id, statusAtual) {
+            const opcoes=['pendente','urgente','enviado','concluido']; const disp=opcoes.filter(s=>s!==statusAtual);
+            const msg=disp.map((s,i)=>`${i+1}. ${getStatusLabel(s)}`).join('\n');
+            const escolha=prompt(`Alterar status de "${getStatusLabel(statusAtual)}" para:\n\n${msg}\n\nDigite o número:`);
+            if(escolha){ const idx=parseInt(escolha)-1; if(idx>=0&&idx<disp.length) window.alterarStatus(id,disp[idx]); }
+        };
+        window.fecharModal = function(id) { document.getElementById(id).style.display='none'; };
+        window.copiarEmail = function() {
+            navigator.clipboard.writeText(emailContent.textContent).then(()=>{ btnCopy.classList.add('copied'); btnCopy.innerHTML='<i class="fas fa-check"></i> Copiado!'; copyFeedback.style.display='inline'; setTimeout(()=>{btnCopy.classList.remove('copied');btnCopy.innerHTML='<i class="fas fa-copy"></i> Copiar texto do email';copyFeedback.style.display='none';},2500); })
+            .catch(()=>{ const ta=document.createElement('textarea'); ta.value=emailContent.textContent; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); btnCopy.classList.add('copied'); btnCopy.innerHTML='<i class="fas fa-check"></i> Copiado!'; copyFeedback.style.display='inline'; setTimeout(()=>{btnCopy.classList.remove('copied');btnCopy.innerHTML='<i class="fas fa-copy"></i> Copiar texto do email';copyFeedback.style.display='none';},2500); });
+        };
+        window.showToast = function(msg,tipo='info') {
+            const toast=document.createElement('div'); toast.className=`toast toast-${tipo}`;
+            const icones={success:'fa-check-circle',error:'fa-exclamation-circle',info:'fa-info-circle'};
+            toast.innerHTML=`<i class="fas ${icones[tipo]||icones.info}"></i> ${msg}`;
+            toastContainer.appendChild(toast); setTimeout(()=>{if(toast.parentNode)toast.remove();},3200);
+        };
+
+        async function carregarDadosDemo() {
+            if(amostras.length>0&&!confirm('Já existem solicitações. Adicionar dados demo mesmo assim?'))return;
+            const btnDemoEl=document.getElementById('btnDemo'); const orig=btnDemoEl.innerHTML; btnDemoEl.innerHTML='<i class="fas fa-spinner fa-spin"></i> Carregando...'; btnDemoEl.disabled=true;
+            const hoje=new Date(); const dias=o=>{const d=new Date(hoje);d.setDate(d.getDate()+o);return d.toISOString().split('T')[0];};
+            const demos=[
+                {id:'AM-DEMO001',dataCriacao:new Date(hoje.getTime()-5*86400000).toISOString(),material:'Sacola plástica personalizada 30x40cm',quantidade:'10 unidades',nomePessoa:'Maria Silva',endereco:'Rua das Flores, 123 - Centro - São Paulo - SP, CEP 01001-000',empresa:'Loja Flor de Lis',prazo:dias(1),tipoEnvio:'pedido_recente',notaFiscal:'NF-00012345',emailContato:'maria@flordelis.com.br',telefone:'(11)99999-0001',observacoes:'Cliente VIP',status:'urgente',codigoRastreio:'BR123456789SP',valorEnvio:25.90},
+                {id:'AM-DEMO002',dataCriacao:new Date(hoje.getTime()-3*86400000).toISOString(),material:'Caixa de papelão kraft 20x20x15cm'+SEPARADOR+'Fita adesiva personalizada',quantidade:'3 unidades'+SEPARADOR+'1 rolo',nomePessoa:'João Santos',endereco:'Av. Paulista, 1000 - Bela Vista - São Paulo - SP, CEP 01310-100',empresa:'Empório Natural',prazo:dias(5),tipoEnvio:'correio',notaFiscal:'',emailContato:'joao@emporionatural.com.br',telefone:'(11)98888-0002',observacoes:'Dois materiais',status:'pendente',codigoRastreio:null,valorEnvio:null},
+                {id:'AM-DEMO003',dataCriacao:new Date(hoje.getTime()-10*86400000).toISOString(),material:'Fita adesiva personalizada 48mm',quantidade:'1 rolo',nomePessoa:'Ana Costa',endereco:'Rua XV de Novembro, 500 - Centro - Curitiba - PR, CEP 80020-310',empresa:'Ateliê Ana Costa',prazo:dias(-2),tipoEnvio:'transportadora',notaFiscal:'NF-00067890',emailContato:'ana@atelie.com',telefone:'(41)97777-0003',observacoes:'Enviado por transportadora',status:'enviado',codigoRastreio:'TX987654321PR',valorEnvio:38.50},
+                {id:'AM-DEMO004',dataCriacao:new Date(hoje.getTime()-15*86400000).toISOString(),material:'Embalagem premium'+SEPARADOR+'Saco craft',quantidade:'5 conj'+SEPARADOR+'8 un',nomePessoa:'Carlos Eduardo',endereco:'Alameda Santos, 200 - Jardim Paulista - São Paulo - SP, CEP 01419-000',empresa:'Presentes Finos',prazo:dias(-8),tipoEnvio:'pedido_recente',notaFiscal:'NF-00054321',emailContato:'carlos@presentes.com',telefone:'(11)96666-0004',observacoes:'Entregue',status:'concluido',codigoRastreio:'BR556677889RJ',valorEnvio:12.00},
+                {id:'AM-DEMO005',dataCriacao:new Date(hoje.getTime()-1*86400000).toISOString(),material:'Saco de papel craft com alça',quantidade:'8 unidades',nomePessoa:'Fernanda Lima',endereco:'Rua das Palmeiras, 45 - Centro - Rio de Janeiro - RJ, CEP 20021-140',empresa:'Boutique Lima',prazo:dias(0),tipoEnvio:'correio',notaFiscal:'',emailContato:'fernanda@boutique.com',telefone:'(21)95555-0005',observacoes:'URGENTE',status:'urgente',codigoRastreio:null,valorEnvio:null}
+            ];
+            try {
+                const batch=writeBatch(db); demos.forEach(d=>{batch.set(doc(db,"amostras",d.id),d);}); await batch.commit();
+                await carregarDadosDoFirestore(); renderizarDashboard(); showToast('Dados demo carregados com sucesso!','success');
+            } catch(e) {
+                try { for(const d of demos) await setDoc(doc(db,"amostras",d.id),d); await carregarDadosDoFirestore(); renderizarDashboard(); showToast('Dados demo carregados com sucesso!','success'); }
+                catch(e2) { showToast('Erro ao carregar dados demo. Tente novamente.','error'); }
+            }
+            btnDemoEl.innerHTML=orig; btnDemoEl.disabled=false;
+        }
+
+        window.dispararMailto = dispararMailto;
+        function init() { document.getElementById('campoPrazo').setAttribute('min',new Date().toISOString().split('T')[0]); inicializarPrimeiroItem(); setupEventListeners(); if(sessionStorage.getItem(ADMIN_SESSION_KEY)==='true') mostrarDashboard(); else mostrarPublico(); }
+        init();
+    </script>
+</body>
+</html>
