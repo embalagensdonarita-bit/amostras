@@ -6,6 +6,16 @@
     <title>Dona Rita | Sistema de Amostras</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- ============ PWA ============ -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    <meta name="theme-color" content="#6d28a8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dona Rita">
+
     <style>
         :root {
             --roxo-950: #1e0533; --roxo-900: #2d0a4a; --roxo-800: #3b0f5e; --roxo-700: #4a1575; --roxo-600: #5c1d8f; --roxo-500: #6d28a8;
@@ -37,6 +47,22 @@
         .header-logo .brand-tag { font-size:0.85rem; font-weight:600; color:var(--roxo-400); letter-spacing:1px; margin-top:2px; background:var(--roxo-50); padding:3px 16px; border-radius:20px; border:1px solid var(--roxo-100); }
         .header .admin-link { position:absolute; top:30px; right:20px; font-size:0.8rem; color:var(--roxo-400); text-decoration:none; font-weight:500; transition:var(--transicao); padding:8px 14px; border-radius:20px; border:1px solid transparent; cursor:pointer; background:none; display:flex; align-items:center; gap:6px; font-family:'Poppins',sans-serif; }
         .header .admin-link:hover { color:var(--roxo-600); background:var(--roxo-50); border-color:var(--roxo-200); }
+
+        /* ============ BOTÃO INSTALAR APP ============ */
+        .btn-install-app {
+            position:absolute; top:78px; right:20px;
+            display:none; align-items:center; gap:8px;
+            padding:10px 18px; border-radius:25px; border:none;
+            background:linear-gradient(135deg,var(--roxo-600),var(--roxo-500));
+            color:#fff; font-family:'Poppins',sans-serif; font-weight:700;
+            font-size:0.82rem; letter-spacing:0.5px; cursor:pointer;
+            box-shadow:var(--sombra-roxa); transition:var(--transicao); z-index:3;
+        }
+        .btn-install-app.show { display:inline-flex; animation:fadeSlideIn 0.4s ease-out; }
+        .btn-install-app:hover { transform:translateY(-2px); box-shadow:0 12px 35px rgba(109,40,168,0.4); }
+        .btn-install-app:active { transform:scale(0.97); }
+        .btn-install-app i { font-size:0.9rem; }
+
         .main-content { flex:1; display:flex; align-items:stretch; justify-content:center; padding:10px 0 30px; position:relative; z-index:2; }
         .form-card { background:var(--branco); border-radius:var(--raio-xl); padding:36px 32px; width:100%; max-width:700px; box-shadow:var(--sombra-xl); border:1px solid var(--roxo-100); position:relative; overflow:hidden; animation:fadeSlideIn 0.6s ease-out; }
         @keyframes fadeSlideIn { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
@@ -242,6 +268,7 @@
             .header-logo .brand-name { font-size:1.4rem; }
             .header .admin-link { position:static; margin-top:8px; justify-content:center; }
             .header { display:flex; flex-direction:column; align-items:center; }
+            .btn-install-app { position:static; margin-top:8px; }
             .form-card { padding:24px 16px; }
             .stats-grid { grid-template-columns:repeat(2,1fr); }
             .btn-pdf { margin-left:0; width:100%; justify-content:center; }
@@ -274,6 +301,7 @@
             </div>
             <button class="admin-link" id="btnAdminLink"><i class="fas fa-lock"></i> Área do Administrador</button>
             <button class="admin-link" id="btnVoltarSite" style="display:none;"><i class="fas fa-arrow-left"></i> Voltar ao Site</button>
+            <button class="btn-install-app" id="btnInstallApp" type="button"><i class="fas fa-download"></i> Instalar App</button>
         </header>
         <div class="main-content">
             <div class="public-section" id="publicSection">
@@ -617,7 +645,7 @@
         const FRETE_STORAGE_KEY = 'donaRita_tabelaFretes_v1';
         const FRETE_ADICIONAL_PAC = 14.20;
         const FRETE_ADICIONAL_SEDEX = 16.33;
-        const FRETE_PESO_BASE_MAX = 2.000; // 2kg cobertos pelo preço base
+        const FRETE_PESO_BASE_MAX = 2.000;
 
         const publicSection = document.getElementById('publicSection');
         const adminLoginSection = document.getElementById('adminLoginSection');
@@ -672,6 +700,76 @@
         const btnLimparFretes = document.getElementById('btnLimparFretes');
         const infoFretes = document.getElementById('infoFretes');
 
+        // ============ PWA ============
+        const btnInstallApp = document.getElementById('btnInstallApp');
+        let deferredPrompt = null;
+
+        function isAppInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                   window.matchMedia('(display-mode: fullscreen)').matches ||
+                   window.matchMedia('(display-mode: minimal-ui)').matches ||
+                   window.navigator.standalone === true ||
+                   document.referrer.includes('android-app://');
+        }
+
+        function setupServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./service-worker.js')
+                        .then((reg) => { /* registrado */ })
+                        .catch((err) => { console.warn('Falha ao registrar SW:', err); });
+                });
+            }
+        }
+
+        function setupInstallPrompt() {
+            if (isAppInstalled()) {
+                btnInstallApp.classList.remove('show');
+                return;
+            }
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (!isAppInstalled()) {
+                    btnInstallApp.classList.add('show');
+                }
+            });
+
+            btnInstallApp.addEventListener('click', async () => {
+                if (!deferredPrompt) {
+                    showToast('Para instalar: use o menu do navegador e escolha "Instalar aplicativo" ou "Adicionar à tela inicial".', 'info');
+                    return;
+                }
+                try {
+                    deferredPrompt.prompt();
+                    const choice = await deferredPrompt.userChoice;
+                    if (choice && choice.outcome === 'accepted') {
+                        showToast('✅ App instalado com sucesso!', 'success');
+                        btnInstallApp.classList.remove('show');
+                    }
+                    deferredPrompt = null;
+                } catch (err) {
+                    console.warn('Erro no prompt de instalação:', err);
+                }
+            });
+
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                btnInstallApp.classList.remove('show');
+                showToast('✅ Aplicativo instalado!', 'success');
+            });
+
+            // Fallback: se em 3s o navegador não disparou o prompt e não estamos instalados,
+            // mostramos o botão — o clique dará a dica no caso de iOS ou navegadores sem suporte.
+            setTimeout(() => {
+                if (!isAppInstalled() && !deferredPrompt && !btnInstallApp.classList.contains('show')) {
+                    btnInstallApp.classList.add('show');
+                }
+            }, 3000);
+        }
+        // ============ FIM PWA ============
+
         let amostras = [];
         let filtroAtual = 'todos';
         let amostraEmailTemp = null;
@@ -683,10 +781,7 @@
             topClientesSolic: null, evolucao: null, evolucaoValor: null
         };
 
-        // ==========================================================
-        // ========== TABELA DE FRETES (LocalStorage) ==============
-        // ==========================================================
-        let TABELA_FRETE = null; // { cidades: [], pac: [], sedex: [], mapa: {} }
+        let TABELA_FRETE = null;
 
         function normalizarCidade(nome) {
             return String(nome || '').toUpperCase()
@@ -705,7 +800,7 @@
             for (let i = 0; i < total; i++) {
                 const key = normalizarCidade(cidades[i]);
                 if (!key) continue;
-                if (!mapa[key]) { // primeira ocorrência vence (evita duplicatas)
+                if (!mapa[key]) {
                     mapa[key] = { pac: pac[i], sedex: sedex[i] };
                 }
             }
@@ -777,7 +872,6 @@
         }
 
         function carregarDemoFretes() {
-            // Exemplo pequeno para demonstração (substitua pelos seus dados reais)
             const cidadesDemo = [
                 'SAO PAULO','OSASCO','CARAPICUIBA','BARUERI','SANTANA DE PARNAIBA','PIRAPORA DO BOM JESUS','JANDIRA',
                 'ITAPEVI','COTIA','VARGEM GRANDE PAULISTA','TABOAO DA SERRA','EMBU DAS ARTES','ITAPECERICA DA SERRA',
@@ -852,7 +946,6 @@
                 30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77,30.77
             ];
             const sedexDemo = pacDemo.map(v => {
-                // Exemplo simplificado: usa mesma lógica de faixas (substitua pelos valores reais da sua tabela SEDEX)
                 if (v === 20.40) return 24.72;
                 if (v === 30.77) return 60.20;
                 if (v === 36.35) return 76.42;
@@ -867,9 +960,6 @@
             showToast('Exemplo carregado no formulário. Clique em Salvar Tabela para ativar.', 'info');
         }
 
-        // ==========================================================
-        // ========== CÁLCULO DE FRETE =============================
-        // ==========================================================
         function calcularFretePorCidade(cidade, tipo, peso) {
             if (!TABELA_FRETE || !TABELA_FRETE.mapa) {
                 return { ok: false, erro: 'Tabela de fretes não carregada. Vá em "Tabela de Fretes" no painel admin e cole os dados.' };
@@ -911,9 +1001,6 @@
             };
         }
 
-        // ==========================================================
-        // ========== UTILITÁRIOS GERAIS ===========================
-        // ==========================================================
         function getTipoEnvioLabel(t) { return { pedido_recente:'📦 Possui pedido recente (envio junto ao pedido)', correio:'🚚 Via Correio (envio separado)', transportadora:'🚛 Transportadora (envio por transportadora)', motorista_drt:'🧑‍💼 Via Motorista DRT (entrega direta)' }[t] || t || 'Não informado'; }
         function getTipoEnvioLabelDetalhes(t) { return { pedido_recente:'📦 Possui pedido recente', correio:'🚚 Via Correio', transportadora:'🚛 Transportadora', motorista_drt:'🧑‍💼 Via Motorista DRT' }[t] || t || 'Não informado'; }
         function getStatusLabel(s) { return { pendente:'Pendente', urgente:'⚠ Urgente', enviado:'Enviado', concluido:'Concluído' }[s] || s; }
@@ -1032,7 +1119,6 @@
             });
             btnGerarPDF.addEventListener('click', gerarPDF);
 
-            // ===== Tabela de Fretes =====
             btnGerenciarFretes.addEventListener('click', () => {
                 carregarTextosNaTelaFretes();
                 atualizarInfoFretes();
@@ -1182,9 +1268,6 @@
             }).join('');
         }
 
-        // ==========================================================
-        // ========== MODAL EDITAR (com cálculo de frete) ==========
-        // ==========================================================
         window.verDetalhes = function(id) {
             const a = amostras.find(x=>x.id===id); if(!a) return;
             const pf=new Date(a.prazo+'T00:00:00').toLocaleDateString('pt-BR'), dc=new Date(a.dataCriacao).toLocaleString('pt-BR');
@@ -1288,7 +1371,6 @@
             resultBox.classList.add('show');
             resultBox.innerHTML = linhas.join('');
 
-            // Preenche automaticamente o campo de valor do envio
             const inputValor = document.getElementById(`inputValorEnvio_${id}`);
             if (inputValor) inputValor.value = res.valorFinal.toFixed(2);
 
@@ -1385,9 +1467,6 @@
             btnDemoEl.innerHTML=orig; btnDemoEl.disabled=false;
         }
 
-        // ==========================================================
-        // ========== DASHBOARD / RELATÓRIOS (inalterado) ==========
-        // ==========================================================
         function parseNumeroQuantidade(str) {
             if(!str) return 0;
             return String(str).split(SEPARADOR).reduce((acc, parte) => {
@@ -1618,6 +1697,12 @@
             inicializarPrimeiroItem();
             carregarTabelaFretes();
             setupEventListeners();
+
+            // ============ PWA INIT ============
+            setupServiceWorker();
+            setupInstallPrompt();
+            // ==================================
+
             if(sessionStorage.getItem(ADMIN_SESSION_KEY)==='true') mostrarDashboard(); else mostrarPublico();
         }
         init();
