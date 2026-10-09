@@ -965,15 +965,15 @@
             showToast('Exemplo carregado no formulário. Clique em Salvar Tabela para ativar.', 'info');
         }
 
-        function calcularFretePorCidade(cidade, tipo, peso) {
+        function calcularFretePorCidade(localidade, tipo, peso) {
             if (!TABELA_FRETE || !TABELA_FRETE.mapa) {
                 return { ok: false, erro: 'Tabela de fretes não carregada. Vá em "Tabela de Fretes" no painel admin e cole os dados.' };
             }
-            const key = normalizarCidade(cidade);
-            if (!key) return { ok: false, erro: 'Cidade inválida.' };
+            const key = normalizarCidade(localidade);
+            if (!key) return { ok: false, erro: 'Localidade inválida.' };
             const registro = TABELA_FRETE.mapa[key];
             if (!registro) {
-                return { ok: false, erro: `Cidade "${cidade}" não encontrada na tabela de fretes.` };
+                return { ok: false, erro: `Localidade "${localidade}" não encontrada na tabela de fretes.` };
             }
             const pesoNum = parseFloat(String(peso).replace(',', '.'));
             if (!pesoNum || pesoNum <= 0) return { ok: false, erro: 'Informe um peso válido (kg).' };
@@ -995,7 +995,7 @@
             return {
                 ok: true,
                 cidade: registro,
-                cidadeNome: cidade.toUpperCase(),
+                cidadeNome: localidade.toUpperCase(),
                 tipo: tipoNorm.toUpperCase(),
                 peso: pesoNum,
                 precoBase,
@@ -1276,7 +1276,24 @@
         window.verDetalhes = function(id) {
             const a = amostras.find(x=>x.id===id); if(!a) return;
             const pf=new Date(a.prazo+'T00:00:00').toLocaleDateString('pt-BR'), dc=new Date(a.dataCriacao).toLocaleString('pt-BR');
-            const cidadeCliente = (a.endereco||'').split(' - ')[1]?.split(',')[0]?.trim() || '';
+            
+            // Mapeamento de UF para nome do Estado
+            const UFs = {
+                AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal',
+                ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão', MT: 'Mato Grosso', MS: 'Mato Grosso do Sul',
+                MG: 'Minas Gerais', PA: 'Pará', PB: 'Paraíba', PR: 'Paraná', PE: 'Pernambuco', PI: 'Piauí',
+                RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte', RS: 'Rio Grande do Sul', RO: 'Rondônia',
+                RR: 'Roraima', SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins'
+            };
+
+            // Extrair o Estado do endereço
+            let estadoCliente = '';
+            const partesEndereco = (a.endereco || '').split(' - ');
+            if (partesEndereco.length >= 3) {
+                const ufRaw = partesEndereco[partesEndereco.length - 1].split(',')[0].trim(); // Ex: "SP"
+                estadoCliente = UFs[ufRaw.toUpperCase()] || ufRaw;
+            }
+
             const tabelaOk = TABELA_FRETE && TABELA_FRETE.cidades && TABELA_FRETE.cidades.length > 0;
 
             document.getElementById('detalhesContent').innerHTML = `
@@ -1299,8 +1316,8 @@
                         <div class="frete-box">
                             <div class="frete-row">
                                 <div>
-                                    <label class="frete-label">Cidade de destino</label>
-                                    <input type="text" id="inputCidadeFrete_${a.id}" class="frete-input" value="${escapeHtml(cidadeCliente)}" placeholder="Ex: SAO PAULO">
+                                    <label class="frete-label">Estado de destino</label>
+                                    <input type="text" id="inputCidadeFrete_${a.id}" class="frete-input" value="${escapeHtml(estadoCliente)}" placeholder="Ex: São Paulo">
                                 </div>
                                 <div>
                                     <label class="frete-label">Tipo de envio</label>
@@ -1352,20 +1369,20 @@
         };
 
         window.calcularFrete = function(id) {
-            const cidade = (document.getElementById(`inputCidadeFrete_${id}`)?.value || '').trim();
+            const localidade = (document.getElementById(`inputCidadeFrete_${id}`)?.value || '').trim();
             const tipo = document.getElementById(`inputTipoFrete_${id}`)?.value || 'pac';
             const peso = document.getElementById(`inputPesoFrete_${id}`)?.value || '';
             const resultBox = document.getElementById(`resultadoFrete_${id}`);
             if(!resultBox) return;
 
-            const res = calcularFretePorCidade(cidade, tipo, peso);
+            const res = calcularFretePorCidade(localidade, tipo, peso);
             if(!res.ok) {
                 resultBox.classList.add('show');
                 resultBox.innerHTML = `<div class="fr-erro"><i class="fas fa-times-circle"></i> ${escapeHtml(res.erro)}</div>`;
                 return;
             }
             const linhas = [];
-            linhas.push(`<div class="fr-linha"><span>🏙️ Cidade</span><strong>${escapeHtml(res.cidadeNome)}</strong></div>`);
+            linhas.push(`<div class="fr-linha"><span>🏙️ Estado</span><strong>${escapeHtml(res.cidadeNome)}</strong></div>`);
             linhas.push(`<div class="fr-linha"><span>📮 Tipo</span><strong>${res.tipo}</strong></div>`);
             linhas.push(`<div class="fr-linha"><span>⚖️ Peso</span><strong>${res.peso.toFixed(3).replace('.', ',')} kg</strong></div>`);
             linhas.push(`<div class="fr-linha"><span>💰 Preço base (até 2 kg)</span><strong>${formatarMoeda(res.precoBase)}</strong></div>`);
