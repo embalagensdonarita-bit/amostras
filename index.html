@@ -643,8 +643,6 @@
         const FRETE_ADICIONAL_SEDEX = 16.33;
         const FRETE_PESO_BASE_MAX = 2.000;
 
-        // ================= MAPA DE ADICIONAL POR PREÇO BASE (CORREIOS) =================
-        // Quando o adicional por cidade não for informado, o sistema descobre pelo preço base.
         const MAPA_ADICIONAL_PAC_POR_BASE = {
             20.40: 4.24,
             30.77: 9.86,
@@ -663,7 +661,6 @@
         function buscarAdicionalPorBasePAC(precoBase) {
             const arred = Math.round(precoBase * 100) / 100;
             if (MAPA_ADICIONAL_PAC_POR_BASE[arred] !== undefined) return MAPA_ADICIONAL_PAC_POR_BASE[arred];
-            // Tenta aproximação (tolerância de 1 centavo)
             for (const k in MAPA_ADICIONAL_PAC_POR_BASE) {
                 if (Math.abs(parseFloat(k) - precoBase) < 0.02) return MAPA_ADICIONAL_PAC_POR_BASE[k];
             }
@@ -677,7 +674,6 @@
             }
             return null;
         }
-        // =============================================================================
 
         const publicSection = document.getElementById('publicSection');
         const adminLoginSection = document.getElementById('adminLoginSection');
@@ -820,18 +816,13 @@
             let s = String(str == null ? '' : str).trim().replace(/\s/g, '');
             if (!s) return 0;
             if (s.indexOf('.') >= 0 && s.indexOf(',') >= 0) {
-                // Ex: 1.234,56 -> 1234.56
                 s = s.replace(/\./g, '').replace(',', '.');
             } else if (s.indexOf(',') >= 0) {
-                // Ex: 4,24 -> 4.24
                 s = s.replace(',', '.');
             }
-            // Se só tem '.', mantém como decimal
             return parseFloat(s) || 0;
         }
 
-        // =================== CONSTRUÇÃO DO MAPA DE FRETES ===================
-        // Agora também aceita adicionalPac/adicionalSedex por cidade (arrays).
         function construirMapaFretes(cidades, pac, sedex, pacAdic, sedexAdic) {
             const mapa = Object.create(null);
             const total = Math.min(cidades.length, pac.length, sedex.length);
@@ -1035,7 +1026,6 @@
                 return 24.72;
             });
 
-            // Adicional demo derivado automaticamente da base (fica consistente com o mapa)
             const pacAdicionalDemo = pacDemo.map(v => buscarAdicionalPorBasePAC(v) ?? 4.24);
             const sedexAdicionalDemo = sedexDemo.map(v => buscarAdicionalPorBaseSEDEX(v) ?? 5.59);
 
@@ -1047,9 +1037,6 @@
             showToast('Exemplo carregado no formulário. Clique em Salvar Tabela para ativar.', 'info');
         }
 
-        // =================== CÁLCULO DE FRETE (CORRIGIDO) ===================
-        // Regra: usa o adicional por cidade se existir; senão, descobre pelo preço base;
-        // senão, usa o padrão global (14.20 PAC / 16.33 SEDEX).
         function calcularFretePorCidade(localidade, tipo, peso) {
             if (!TABELA_FRETE || !TABELA_FRETE.mapa) {
                 return { ok: false, erro: 'Tabela de fretes não carregada. Vá em "Tabela de Fretes" no painel admin e cole os dados.' };
@@ -1067,20 +1054,17 @@
             const precoBase = tipoNorm === 'pac' ? registro.pac : registro.sedex;
             const adicionalPadrao = tipoNorm === 'pac' ? FRETE_ADICIONAL_PAC : FRETE_ADICIONAL_SEDEX;
 
-            // 1) Tenta adicional por cidade
             let adicionalPorKg = null;
             const adicionalCidade = tipoNorm === 'pac' ? registro.adicionalPac : registro.adicionalSedex;
             if (adicionalCidade != null && !isNaN(adicionalCidade) && adicionalCidade >= 0) {
                 adicionalPorKg = adicionalCidade;
             }
-            // 2) Fallback: descobre pelo preço base (Correios)
             if (adicionalPorKg == null) {
                 const porBase = tipoNorm === 'pac'
                     ? buscarAdicionalPorBasePAC(precoBase)
                     : buscarAdicionalPorBaseSEDEX(precoBase);
                 if (porBase != null) adicionalPorKg = porBase;
             }
-            // 3) Fallback final: padrão global
             if (adicionalPorKg == null) adicionalPorKg = adicionalPadrao;
 
             let valorFinal = precoBase;
@@ -1106,7 +1090,6 @@
                 adicionalPorKg
             };
         }
-        // ===================================================================
 
         function getTipoEnvioLabel(t) { return { pedido_recente:'📦 Possui pedido recente (envio junto ao pedido)', correio:'🚚 Via Correio (envio separado)', transportadora:'🚛 Transportadora (envio por transportadora)', motorista_drt:'🧑‍💼 Via Motorista DRT (entrega direta)' }[t] || t || 'Não informado'; }
         function getTipoEnvioLabelDetalhes(t) { return { pedido_recente:'📦 Possui pedido recente', correio:'🚚 Via Correio', transportadora:'🚛 Transportadora', motorista_drt:'🧑‍💼 Via Motorista DRT' }[t] || t || 'Não informado'; }
@@ -1379,20 +1362,22 @@
         window.verDetalhes = function(id) {
             const a = amostras.find(x=>x.id===id); if(!a) return;
             const pf=new Date(a.prazo+'T00:00:00').toLocaleDateString('pt-BR'), dc=new Date(a.dataCriacao).toLocaleString('pt-BR');
-            const UFs = {
-                AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal',
-                ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão', MT: 'Mato Grosso', MS: 'Mato Grosso do Sul',
-                MG: 'Minas Gerais', PA: 'Pará', PB: 'Paraíba', PR: 'Paraná', PE: 'Pernambuco', PI: 'Piauí',
-                RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte', RS: 'Rio Grande do Sul', RO: 'Rondônia',
-                RR: 'Roraima', SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins'
-            };
-            let estadoCliente = '';
-            const partesEndereco = (a.endereco || '').split(' - ');
+
+            // Extrair a CIDADE do endereço automaticamente
+            let cidadeCliente = '';
+            const partesEndereco = (a.endereco || '').split(' - ').map(p => p.trim()).filter(Boolean);
             if (partesEndereco.length >= 3) {
-                const ufRaw = partesEndereco[partesEndereco.length - 1].split(',')[0].trim();
-                estadoCliente = UFs[ufRaw.toUpperCase()] || ufRaw;
+                let penultimo = partesEndereco[partesEndereco.length - 2];
+                // Se bairro e cidade estiverem separados por vírgula, pega a última parte (cidade)
+                if (penultimo.includes(',')) {
+                    const subs = penultimo.split(',').map(s => s.trim()).filter(Boolean);
+                    penultimo = subs[subs.length - 1] || penultimo;
+                }
+                cidadeCliente = penultimo;
             }
+
             const tabelaOk = TABELA_FRETE && TABELA_FRETE.cidades && TABELA_FRETE.cidades.length > 0;
+
             document.getElementById('detalhesContent').innerHTML = `
                 <div class="detail-grid">
                     <div class="detail-item"><span class="dl">ID</span><span class="dv">${a.id}</span></div>
@@ -1413,8 +1398,8 @@
                         <div class="frete-box">
                             <div class="frete-row">
                                 <div>
-                                    <label class="frete-label">Estado de destino</label>
-                                    <input type="text" id="inputCidadeFrete_${a.id}" class="frete-input" value="${escapeHtml(estadoCliente)}" placeholder="Ex: São Paulo">
+                                    <label class="frete-label">Cidade de destino</label>
+                                    <input type="text" id="inputCidadeFrete_${a.id}" class="frete-input" value="${escapeHtml(cidadeCliente)}" placeholder="Ex: São Paulo">
                                 </div>
                                 <div>
                                     <label class="frete-label">Tipo de envio</label>
@@ -1479,7 +1464,7 @@
                 return;
             }
             const linhas = [];
-            linhas.push(`<div class="fr-linha"><span>🏙️ Estado</span><strong>${escapeHtml(res.cidadeNome)}</strong></div>`);
+            linhas.push(`<div class="fr-linha"><span>🏙️ Cidade</span><strong>${escapeHtml(res.cidadeNome)}</strong></div>`);
             linhas.push(`<div class="fr-linha"><span>📮 Tipo</span><strong>${res.tipo}</strong></div>`);
             linhas.push(`<div class="fr-linha"><span>⚖️ Peso</span><strong>${res.peso.toFixed(3).replace('.', ',')} kg</strong></div>`);
             linhas.push(`<div class="fr-linha"><span>💰 Preço base (até 2 kg)</span><strong>${formatarMoeda(res.precoBase)}</strong></div>`);
