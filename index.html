@@ -6,8 +6,6 @@
     <title>Dona Rita | Sistema de Amostras</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- ============ PWA ============ -->
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="icon" type="image/png" href="icon.png">
@@ -47,22 +45,11 @@
         .header-logo .brand-tag { font-size:0.85rem; font-weight:600; color:var(--roxo-400); letter-spacing:1px; margin-top:2px; background:var(--roxo-50); padding:3px 16px; border-radius:20px; border:1px solid var(--roxo-100); }
         .header .admin-link { position:absolute; top:30px; right:20px; font-size:0.8rem; color:var(--roxo-400); text-decoration:none; font-weight:500; transition:var(--transicao); padding:8px 14px; border-radius:20px; border:1px solid transparent; cursor:pointer; background:none; display:flex; align-items:center; gap:6px; font-family:'Poppins',sans-serif; }
         .header .admin-link:hover { color:var(--roxo-600); background:var(--roxo-50); border-color:var(--roxo-200); }
-
-        /* ============ BOTÃO INSTALAR APP ============ */
-        .btn-install-app {
-            position:absolute; top:78px; right:20px;
-            display:none; align-items:center; gap:8px;
-            padding:10px 18px; border-radius:25px; border:none;
-            background:linear-gradient(135deg,var(--roxo-600),var(--roxo-500));
-            color:#fff; font-family:'Poppins',sans-serif; font-weight:700;
-            font-size:0.82rem; letter-spacing:0.5px; cursor:pointer;
-            box-shadow:var(--sombra-roxa); transition:var(--transicao); z-index:3;
-        }
+        .btn-install-app { position:absolute; top:78px; right:20px; display:none; align-items:center; gap:8px; padding:10px 18px; border-radius:25px; border:none; background:linear-gradient(135deg,var(--roxo-600),var(--roxo-500)); color:#fff; font-family:'Poppins',sans-serif; font-weight:700; font-size:0.82rem; letter-spacing:0.5px; cursor:pointer; box-shadow:var(--sombra-roxa); transition:var(--transicao); z-index:3; }
         .btn-install-app.show { display:inline-flex; animation:fadeSlideIn 0.4s ease-out; }
         .btn-install-app:hover { transform:translateY(-2px); box-shadow:0 12px 35px rgba(109,40,168,0.4); }
         .btn-install-app:active { transform:scale(0.97); }
         .btn-install-app i { font-size:0.9rem; }
-
         .main-content { flex:1; display:flex; align-items:stretch; justify-content:center; padding:10px 0 30px; position:relative; z-index:2; }
         .form-card { background:var(--branco); border-radius:var(--raio-xl); padding:36px 32px; width:100%; max-width:700px; box-shadow:var(--sombra-xl); border:1px solid var(--roxo-100); position:relative; overflow:hidden; animation:fadeSlideIn 0.6s ease-out; }
         @keyframes fadeSlideIn { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
@@ -532,7 +519,6 @@
         </div>
     </div>
 
-    <!-- ============ MODAL EMAIL ============ -->
     <div class="modal-overlay" id="modalEmail" style="display:none;">
         <div class="modal-dialog">
             <div class="modal-header"><h3><i class="fas fa-envelope" style="color:var(--roxo-500);"></i> Email Gerado</h3><button class="modal-close" onclick="fecharModal('modalEmail')">✕</button></div>
@@ -549,12 +535,10 @@
         </div>
     </div>
 
-    <!-- ============ MODAL DETALHES / EDITAR (com cálculo de frete) ============ -->
     <div class="modal-overlay" id="modalDetalhes" style="display:none;">
         <div class="modal-dialog"><div class="modal-header"><h3><i class="fas fa-edit" style="color:var(--roxo-500);"></i> Editar Solicitação</h3><button class="modal-close" onclick="fecharModal('modalDetalhes')">✕</button></div><div class="modal-body" id="detalhesContent"></div></div>
     </div>
 
-    <!-- ============ MODAL RASTREIO ============ -->
     <div class="modal-overlay" id="modalRastreio" style="display:none;">
         <div class="modal-dialog" style="max-width:500px;">
             <div class="modal-header"><h3><i class="fas fa-search-location" style="color:var(--roxo-500);"></i> Consultar Rastreio</h3><button class="modal-close" onclick="fecharModal('modalRastreio')">✕</button></div>
@@ -577,7 +561,6 @@
         </div>
     </div>
 
-    <!-- ============ MODAL GERENCIAR TABELA DE FRETES ============ -->
     <div class="modal-overlay" id="modalFretes" style="display:none;">
         <div class="modal-dialog" style="max-width:820px;">
             <div class="modal-header">
@@ -586,10 +569,10 @@
             </div>
             <div class="modal-body">
                 <div class="import-info">
-                    <strong>Como funciona:</strong> cole abaixo a lista de <strong>cidades</strong> (uma por linha), a lista de <strong>preços PAC</strong> (um por linha, na mesma ordem das cidades) e a lista de <strong>preços SEDEX</strong> (um por linha, na mesma ordem). Os dados ficam salvos no seu navegador (LocalStorage) e são usados para calcular automaticamente o valor do frete no botão de editar. Os preços são para <strong>1,001 kg a 2,000 kg</strong>. Acima de 2 kg: <strong>+R$ 14,20/kg (PAC)</strong> e <strong>+R$ 16,33/kg (SEDEX)</strong>.
+                    <strong>Como funciona:</strong> cole abaixo a lista de <strong>cidades</strong> (uma por linha), a lista de <strong>preços PAC</strong> (um por linha, na mesma ordem das cidades) e a lista de <strong>preços SEDEX</strong> (um por linha, na mesma ordem). Cole também a lista de <strong>valores adicionais por kg extra</strong> para PAC e SEDEX (mesma ordem das cidades). Os dados ficam salvos no seu navegador (LocalStorage) e são usados para calcular automaticamente o valor do frete. Os preços são para <strong>1,001 kg a 2,000 kg</strong>. Acima de 2 kg é somado o <strong>valor adicional por kg extra</strong> da cidade (arredondado para cima). Se a lista de adicionais não for informada, o sistema <strong>calcula automaticamente o adicional com base no preço base</strong> da cidade (padrão Correios).
                 </div>
                 <div class="import-box">
-                    <label>1) Cidades (uma por linha — mesma ordem para PAC e SEDEX)</label>
+                    <label>1) Cidades (uma por linha — mesma ordem para PAC, SEDEX e adicionais)</label>
                     <textarea id="txtCidades" placeholder="SAO PAULO&#10;OSASCO&#10;CARAPICUIBA&#10;..."></textarea>
                 </div>
                 <div class="import-box">
@@ -599,6 +582,14 @@
                 <div class="import-box">
                     <label>3) Preços SEDEX (um por linha, na ordem das cidades)</label>
                     <textarea id="txtSedexPrecos" placeholder="24,72&#10;24,72&#10;24,72&#10;..."></textarea>
+                </div>
+                <div class="import-box">
+                    <label>4) Valor adicional por kg extra — PAC (um por linha, na ordem das cidades)</label>
+                    <textarea id="txtPacAdicional" placeholder="4,24&#10;4,24&#10;9,86&#10;..."></textarea>
+                </div>
+                <div class="import-box">
+                    <label>5) Valor adicional por kg extra — SEDEX (um por linha, na ordem das cidades)</label>
+                    <textarea id="txtSedexAdicional" placeholder="5,59&#10;5,59&#10;16,33&#10;..."></textarea>
                 </div>
                 <div class="import-actions">
                     <button class="btn-verde-sec" id="btnSalvarFretes" type="button"><i class="fas fa-save"></i> Salvar Tabela</button>
@@ -625,11 +616,9 @@
         import { initializeApp } from "firebase/app";
         import { getFirestore, collection, setDoc, getDocs, getDoc, updateDoc, deleteDoc, doc, query, orderBy, writeBatch } from "firebase/firestore";
 
-        // ============ REGISTRAR PLUGIN DATALABELS ============
         if (typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') {
             Chart.register(ChartDataLabels);
         }
-        // =====================================================
 
         const firebaseConfig = {
             apiKey: "AIzaSyCACo22Vzs-0sub0FwpWgI8OC2iuIXcgxc",
@@ -653,6 +642,42 @@
         const FRETE_ADICIONAL_PAC = 14.20;
         const FRETE_ADICIONAL_SEDEX = 16.33;
         const FRETE_PESO_BASE_MAX = 2.000;
+
+        // ================= MAPA DE ADICIONAL POR PREÇO BASE (CORREIOS) =================
+        // Quando o adicional por cidade não for informado, o sistema descobre pelo preço base.
+        const MAPA_ADICIONAL_PAC_POR_BASE = {
+            20.40: 4.24,
+            30.77: 9.86,
+            36.35: 11.10,
+            56.92: 14.20,
+            76.38: 17.71
+        };
+        const MAPA_ADICIONAL_SEDEX_POR_BASE = {
+            24.72: 5.59,
+            60.20: 16.33,
+            76.42: 20.23,
+            92.05: 26.21,
+            105.05: 30.71
+        };
+
+        function buscarAdicionalPorBasePAC(precoBase) {
+            const arred = Math.round(precoBase * 100) / 100;
+            if (MAPA_ADICIONAL_PAC_POR_BASE[arred] !== undefined) return MAPA_ADICIONAL_PAC_POR_BASE[arred];
+            // Tenta aproximação (tolerância de 1 centavo)
+            for (const k in MAPA_ADICIONAL_PAC_POR_BASE) {
+                if (Math.abs(parseFloat(k) - precoBase) < 0.02) return MAPA_ADICIONAL_PAC_POR_BASE[k];
+            }
+            return null;
+        }
+        function buscarAdicionalPorBaseSEDEX(precoBase) {
+            const arred = Math.round(precoBase * 100) / 100;
+            if (MAPA_ADICIONAL_SEDEX_POR_BASE[arred] !== undefined) return MAPA_ADICIONAL_SEDEX_POR_BASE[arred];
+            for (const k in MAPA_ADICIONAL_SEDEX_POR_BASE) {
+                if (Math.abs(parseFloat(k) - precoBase) < 0.02) return MAPA_ADICIONAL_SEDEX_POR_BASE[k];
+            }
+            return null;
+        }
+        // =============================================================================
 
         const publicSection = document.getElementById('publicSection');
         const adminLoginSection = document.getElementById('adminLoginSection');
@@ -702,12 +727,13 @@
         const txtCidades = document.getElementById('txtCidades');
         const txtPacPrecos = document.getElementById('txtPacPrecos');
         const txtSedexPrecos = document.getElementById('txtSedexPrecos');
+        const txtPacAdicional = document.getElementById('txtPacAdicional');
+        const txtSedexAdicional = document.getElementById('txtSedexAdicional');
         const btnSalvarFretes = document.getElementById('btnSalvarFretes');
         const btnCarregarDemoFretes = document.getElementById('btnCarregarDemoFretes');
         const btnLimparFretes = document.getElementById('btnLimparFretes');
         const infoFretes = document.getElementById('infoFretes');
 
-        // ============ PWA ============
         const btnInstallApp = document.getElementById('btnInstallApp');
         let deferredPrompt = null;
 
@@ -723,7 +749,7 @@
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('./service-worker.js')
-                        .then((reg) => { /* registrado */ })
+                        .then((reg) => { })
                         .catch((err) => { console.warn('Falha ao registrar SW:', err); });
                 });
             }
@@ -734,7 +760,6 @@
                 btnInstallApp.classList.remove('show');
                 return;
             }
-
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
@@ -742,7 +767,6 @@
                     btnInstallApp.classList.add('show');
                 }
             });
-
             btnInstallApp.addEventListener('click', async () => {
                 if (!deferredPrompt) {
                     showToast('Para instalar: use o menu do navegador e escolha "Instalar aplicativo" ou "Adicionar à tela inicial".', 'info');
@@ -760,20 +784,17 @@
                     console.warn('Erro no prompt de instalação:', err);
                 }
             });
-
             window.addEventListener('appinstalled', () => {
                 deferredPrompt = null;
                 btnInstallApp.classList.remove('show');
                 showToast('✅ Aplicativo instalado!', 'success');
             });
-
             setTimeout(() => {
                 if (!isAppInstalled() && !deferredPrompt && !btnInstallApp.classList.contains('show')) {
                     btnInstallApp.classList.add('show');
                 }
             }, 3000);
         }
-        // ============ FIM PWA ============
 
         let amostras = [];
         let filtroAtual = 'todos';
@@ -796,17 +817,36 @@
 
         function parseNumeroBR(str) {
             if (typeof str === 'number') return str;
-            return parseFloat(String(str || '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+            let s = String(str == null ? '' : str).trim().replace(/\s/g, '');
+            if (!s) return 0;
+            if (s.indexOf('.') >= 0 && s.indexOf(',') >= 0) {
+                // Ex: 1.234,56 -> 1234.56
+                s = s.replace(/\./g, '').replace(',', '.');
+            } else if (s.indexOf(',') >= 0) {
+                // Ex: 4,24 -> 4.24
+                s = s.replace(',', '.');
+            }
+            // Se só tem '.', mantém como decimal
+            return parseFloat(s) || 0;
         }
 
-        function construirMapaFretes(cidades, pac, sedex) {
+        // =================== CONSTRUÇÃO DO MAPA DE FRETES ===================
+        // Agora também aceita adicionalPac/adicionalSedex por cidade (arrays).
+        function construirMapaFretes(cidades, pac, sedex, pacAdic, sedexAdic) {
             const mapa = Object.create(null);
             const total = Math.min(cidades.length, pac.length, sedex.length);
+            const temPacAdic = Array.isArray(pacAdic) && pacAdic.length === cidades.length;
+            const temSedexAdic = Array.isArray(sedexAdic) && sedexAdic.length === cidades.length;
             for (let i = 0; i < total; i++) {
                 const key = normalizarCidade(cidades[i]);
                 if (!key) continue;
                 if (!mapa[key]) {
-                    mapa[key] = { pac: pac[i], sedex: sedex[i] };
+                    mapa[key] = {
+                        pac: pac[i],
+                        sedex: sedex[i],
+                        adicionalPac: temPacAdic ? pacAdic[i] : null,
+                        adicionalSedex: temSedexAdic ? sedexAdic[i] : null
+                    };
                 }
             }
             return mapa;
@@ -823,7 +863,7 @@
                 if (!raw) return null;
                 const obj = JSON.parse(raw);
                 if (!obj || !Array.isArray(obj.cidades) || !Array.isArray(obj.pac) || !Array.isArray(obj.sedex)) return null;
-                obj.mapa = construirMapaFretes(obj.cidades, obj.pac, obj.sedex);
+                obj.mapa = construirMapaFretes(obj.cidades, obj.pac, obj.sedex, obj.adicionalPac, obj.adicionalSedex);
                 return obj;
             } catch (e) { return null; }
         }
@@ -836,7 +876,8 @@
         function atualizarInfoFretes() {
             if (!infoFretes) return;
             if (TABELA_FRETE && TABELA_FRETE.cidades.length > 0) {
-                infoFretes.innerHTML = `✅ Tabela carregada: <strong>${TABELA_FRETE.cidades.length}</strong> cidades ativas.`;
+                const temAdic = Array.isArray(TABELA_FRETE.adicionalPac) || Array.isArray(TABELA_FRETE.adicionalSedex);
+                infoFretes.innerHTML = `✅ Tabela carregada: <strong>${TABELA_FRETE.cidades.length}</strong> cidades ativas.${temAdic ? ' Adicionais por peso personalizados.' : ' (Adicional calculado automaticamente pela base.)'}`;
                 infoFretes.style.color = '#059669';
             } else {
                 infoFretes.innerHTML = '⚠️ Nenhuma tabela carregada. Cole os dados e clique em <strong>Salvar Tabela</strong>.';
@@ -845,16 +886,31 @@
         }
 
         function carregarTextosNaTelaFretes() {
-            if (!TABELA_FRETE) { txtCidades.value = ''; txtPacPrecos.value = ''; txtSedexPrecos.value = ''; return; }
+            if (!TABELA_FRETE) {
+                txtCidades.value = '';
+                txtPacPrecos.value = '';
+                txtSedexPrecos.value = '';
+                txtPacAdicional.value = '';
+                txtSedexAdicional.value = '';
+                return;
+            }
             txtCidades.value = TABELA_FRETE.cidades.join('\n');
             txtPacPrecos.value = TABELA_FRETE.pac.map(v => v.toFixed(2).replace('.', ',')).join('\n');
             txtSedexPrecos.value = TABELA_FRETE.sedex.map(v => v.toFixed(2).replace('.', ',')).join('\n');
+            txtPacAdicional.value = Array.isArray(TABELA_FRETE.adicionalPac)
+                ? TABELA_FRETE.adicionalPac.map(v => (v != null && !isNaN(v)) ? v.toFixed(2).replace('.', ',') : '').join('\n')
+                : '';
+            txtSedexAdicional.value = Array.isArray(TABELA_FRETE.adicionalSedex)
+                ? TABELA_FRETE.adicionalSedex.map(v => (v != null && !isNaN(v)) ? v.toFixed(2).replace('.', ',') : '').join('\n')
+                : '';
         }
 
         function salvarTabelaFretesDoFormulario() {
             const cidadesRaw = txtCidades.value.split('\n').map(l => l.trim()).filter(Boolean);
             const pacRaw = txtPacPrecos.value.split('\n').map(l => l.trim()).filter(Boolean);
             const sedexRaw = txtSedexPrecos.value.split('\n').map(l => l.trim()).filter(Boolean);
+            const pacAdicRaw = txtPacAdicional.value.split('\n').map(l => l.trim()).filter(Boolean);
+            const sedexAdicRaw = txtSedexAdicional.value.split('\n').map(l => l.trim()).filter(Boolean);
 
             if (cidadesRaw.length === 0) { showToast('Cole a lista de cidades!', 'error'); return; }
             if (pacRaw.length === 0) { showToast('Cole os preços PAC!', 'error'); return; }
@@ -862,10 +918,30 @@
             if (pacRaw.length !== cidadesRaw.length) { showToast(`A quantidade de preços PAC (${pacRaw.length}) difere da quantidade de cidades (${cidadesRaw.length}).`, 'error'); return; }
             if (sedexRaw.length !== cidadesRaw.length) { showToast(`A quantidade de preços SEDEX (${sedexRaw.length}) difere da quantidade de cidades (${cidadesRaw.length}).`, 'error'); return; }
 
+            let adicionalPac = null;
+            let adicionalSedex = null;
+
+            if (pacAdicRaw.length > 0) {
+                if (pacAdicRaw.length !== cidadesRaw.length) {
+                    showToast(`A quantidade de adicionais PAC (${pacAdicRaw.length}) difere da quantidade de cidades (${cidadesRaw.length}).`, 'error');
+                    return;
+                }
+                adicionalPac = pacAdicRaw.map(parseNumeroBR);
+            }
+            if (sedexAdicRaw.length > 0) {
+                if (sedexAdicRaw.length !== cidadesRaw.length) {
+                    showToast(`A quantidade de adicionais SEDEX (${sedexAdicRaw.length}) difere da quantidade de cidades (${cidadesRaw.length}).`, 'error');
+                    return;
+                }
+                adicionalSedex = sedexAdicRaw.map(parseNumeroBR);
+            }
+
             const pac = pacRaw.map(parseNumeroBR);
             const sedex = sedexRaw.map(parseNumeroBR);
             const tabela = { cidades: cidadesRaw, pac, sedex };
-            tabela.mapa = construirMapaFretes(tabela.cidades, tabela.pac, tabela.sedex);
+            if (adicionalPac) tabela.adicionalPac = adicionalPac;
+            if (adicionalSedex) tabela.adicionalSedex = adicionalSedex;
+            tabela.mapa = construirMapaFretes(tabela.cidades, tabela.pac, tabela.sedex, tabela.adicionalPac, tabela.adicionalSedex);
 
             if (salvarTabelaFretesNoStorage(tabela)) {
                 TABELA_FRETE = tabela;
@@ -959,12 +1035,21 @@
                 return 24.72;
             });
 
+            // Adicional demo derivado automaticamente da base (fica consistente com o mapa)
+            const pacAdicionalDemo = pacDemo.map(v => buscarAdicionalPorBasePAC(v) ?? 4.24);
+            const sedexAdicionalDemo = sedexDemo.map(v => buscarAdicionalPorBaseSEDEX(v) ?? 5.59);
+
             txtCidades.value = cidadesDemo.join('\n');
             txtPacPrecos.value = pacDemo.map(v => v.toFixed(2).replace('.', ',')).join('\n');
             txtSedexPrecos.value = sedexDemo.map(v => v.toFixed(2).replace('.', ',')).join('\n');
+            txtPacAdicional.value = pacAdicionalDemo.map(v => v.toFixed(2).replace('.', ',')).join('\n');
+            txtSedexAdicional.value = sedexAdicionalDemo.map(v => v.toFixed(2).replace('.', ',')).join('\n');
             showToast('Exemplo carregado no formulário. Clique em Salvar Tabela para ativar.', 'info');
         }
 
+        // =================== CÁLCULO DE FRETE (CORRIGIDO) ===================
+        // Regra: usa o adicional por cidade se existir; senão, descobre pelo preço base;
+        // senão, usa o padrão global (14.20 PAC / 16.33 SEDEX).
         function calcularFretePorCidade(localidade, tipo, peso) {
             if (!TABELA_FRETE || !TABELA_FRETE.mapa) {
                 return { ok: false, erro: 'Tabela de fretes não carregada. Vá em "Tabela de Fretes" no painel admin e cole os dados.' };
@@ -980,7 +1065,23 @@
 
             const tipoNorm = (tipo === 'pac') ? 'pac' : 'sedex';
             const precoBase = tipoNorm === 'pac' ? registro.pac : registro.sedex;
-            const adicionalPorKg = tipoNorm === 'pac' ? FRETE_ADICIONAL_PAC : FRETE_ADICIONAL_SEDEX;
+            const adicionalPadrao = tipoNorm === 'pac' ? FRETE_ADICIONAL_PAC : FRETE_ADICIONAL_SEDEX;
+
+            // 1) Tenta adicional por cidade
+            let adicionalPorKg = null;
+            const adicionalCidade = tipoNorm === 'pac' ? registro.adicionalPac : registro.adicionalSedex;
+            if (adicionalCidade != null && !isNaN(adicionalCidade) && adicionalCidade >= 0) {
+                adicionalPorKg = adicionalCidade;
+            }
+            // 2) Fallback: descobre pelo preço base (Correios)
+            if (adicionalPorKg == null) {
+                const porBase = tipoNorm === 'pac'
+                    ? buscarAdicionalPorBasePAC(precoBase)
+                    : buscarAdicionalPorBaseSEDEX(precoBase);
+                if (porBase != null) adicionalPorKg = porBase;
+            }
+            // 3) Fallback final: padrão global
+            if (adicionalPorKg == null) adicionalPorKg = adicionalPadrao;
 
             let valorFinal = precoBase;
             let kgExtra = 0;
@@ -1005,6 +1106,7 @@
                 adicionalPorKg
             };
         }
+        // ===================================================================
 
         function getTipoEnvioLabel(t) { return { pedido_recente:'📦 Possui pedido recente (envio junto ao pedido)', correio:'🚚 Via Correio (envio separado)', transportadora:'🚛 Transportadora (envio por transportadora)', motorista_drt:'🧑‍💼 Via Motorista DRT (entrega direta)' }[t] || t || 'Não informado'; }
         function getTipoEnvioLabelDetalhes(t) { return { pedido_recente:'📦 Possui pedido recente', correio:'🚚 Via Correio', transportadora:'🚛 Transportadora', motorista_drt:'🧑‍💼 Via Motorista DRT' }[t] || t || 'Não informado'; }
@@ -1136,6 +1238,7 @@
                 localStorage.removeItem(FRETE_STORAGE_KEY);
                 TABELA_FRETE = null;
                 txtCidades.value = ''; txtPacPrecos.value = ''; txtSedexPrecos.value = '';
+                txtPacAdicional.value = ''; txtSedexAdicional.value = '';
                 atualizarInfoFretes();
                 showToast('Tabela removida.', 'info');
             });
@@ -1276,8 +1379,6 @@
         window.verDetalhes = function(id) {
             const a = amostras.find(x=>x.id===id); if(!a) return;
             const pf=new Date(a.prazo+'T00:00:00').toLocaleDateString('pt-BR'), dc=new Date(a.dataCriacao).toLocaleString('pt-BR');
-            
-            // Mapeamento de UF para nome do Estado
             const UFs = {
                 AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal',
                 ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão', MT: 'Mato Grosso', MS: 'Mato Grosso do Sul',
@@ -1285,17 +1386,13 @@
                 RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte', RS: 'Rio Grande do Sul', RO: 'Rondônia',
                 RR: 'Roraima', SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins'
             };
-
-            // Extrair o Estado do endereço
             let estadoCliente = '';
             const partesEndereco = (a.endereco || '').split(' - ');
             if (partesEndereco.length >= 3) {
-                const ufRaw = partesEndereco[partesEndereco.length - 1].split(',')[0].trim(); // Ex: "SP"
+                const ufRaw = partesEndereco[partesEndereco.length - 1].split(',')[0].trim();
                 estadoCliente = UFs[ufRaw.toUpperCase()] || ufRaw;
             }
-
             const tabelaOk = TABELA_FRETE && TABELA_FRETE.cidades && TABELA_FRETE.cidades.length > 0;
-
             document.getElementById('detalhesContent').innerHTML = `
                 <div class="detail-grid">
                     <div class="detail-item"><span class="dl">ID</span><span class="dv">${a.id}</span></div>
@@ -1719,12 +1816,8 @@
             inicializarPrimeiroItem();
             carregarTabelaFretes();
             setupEventListeners();
-
-            // ============ PWA INIT ============
             setupServiceWorker();
             setupInstallPrompt();
-            // ==================================
-
             if(sessionStorage.getItem(ADMIN_SESSION_KEY)==='true') mostrarDashboard(); else mostrarPublico();
         }
         init();
